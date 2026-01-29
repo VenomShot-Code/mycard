@@ -3,82 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Venom Shot Pro</title>
+    <title>Usman Baloch Pro Gamer</title>
     <style>
-        body { transition: 0.5s; margin: 0; padding-bottom: 80px; display: flex; flex-direction: column; align-items: center; font-family: sans-serif; background: #0a0a0a; color: white; }
-        .page { display: none; width: 320px; animation: fadeIn 0.5s; margin-top: 20px; }
+        body { transition: 0.5s; margin: 0; padding-bottom: 80px; display: flex; flex-direction: column; align-items: center; font-family: sans-serif; background: #0a0a0a; color: white; overflow-x: hidden; }
+        .page { display: none; width: 100%; max-width: 400px; animation: fadeIn 0.5s; margin-top: 20px; text-align: center; }
         .active { display: block; }
-        .dark-card { background: #1a1a1a; border: 2px solid #ff0000; padding: 30px; border-radius: 25px; text-align: center; box-shadow: 0 0 20px rgba(255,0,0,0.2); }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        /* Shooting Area */
+        #game-container { width: 90%; height: 300px; background: #111; border: 2px solid #ff0000; position: relative; margin: 10px auto; overflow: hidden; border-radius: 15px; cursor: crosshair; }
+        .target { width: 40px; height: 40px; background: url('https://cdn-icons-png.flaticon.com/512/805/805370.png'); background-size: cover; position: absolute; border-radius: 50%; border: 1px solid red; transition: 0.1s; }
+        
         .nav-bar { position: fixed; bottom: 0; width: 100%; background: #1a1a1a; display: flex; justify-content: space-around; padding: 15px 0; border-top: 2px solid #ff0000; z-index: 100; }
         .nav-item { color: #888; cursor: pointer; font-size: 10px; font-weight: bold; text-align: center; }
         .active-nav { color: #ff0000; }
-        .btn-main { background: #ff0000; color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; text-decoration: none; display: block; }
-        
-        /* Game Styles */
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 15px; }
-        .cell { width: 80px; height: 80px; background: #222; border: 1px solid #ff0000; display: flex; justify-content: center; align-items: center; font-size: 30px; font-weight: bold; cursor: pointer; }
+        .btn-main { background: #ff0000; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; margin: 5px; text-decoration: none; }
     </style>
 </head>
-<body>
+<body id="mainBody">
 
-    <audio id="clickSound"><source src="https://actions.google.com/sounds/v1/foley/button_click.ogg" type="audio/ogg"></audio>
+    <audio id="shootSound"><source src="https://www.soundjay.com/mechanical/gun-gunshot-01.mp3" type="audio/mp3"></audio>
 
     <div id="startOverlay" style="position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:999; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-        <h1 style="color: #ff0000;">VENOM SHOT</h1>
-        <button onclick="enableAudio()" style="padding: 15px 30px; background:#ff0000; color:white; border:none; border-radius:10px; font-size:18px; font-weight:bold; cursor:pointer;">START ZONE 🎮</button>
+        <h1 style="color: #ff0000;">USMAN SHOOTER v1</h1>
+        <button onclick="enableAudio()" style="padding: 15px 30px; background:#ff0000; color:white; border:none; border-radius:10px; font-size:18px; font-weight:bold; cursor:pointer;">START BATTLE ⚔️</button>
     </div>
 
     <div id="home" class="page active">
-        <div class="dark-card">
-            <img src="https://cdn-icons-png.flaticon.com/512/805/805370.png" width="100" style="border-radius: 50%; border: 2px solid #ff0000;">
-            <h2 style="color: #ff0000; margin: 10px 0;">VENOM SHOT</h2>
-            <div style="background: #000; padding: 10px; border-radius: 10px; border: 1px dashed #ff0000; margin-bottom: 15px;">
-                <small style="color: #ff0000;">MY UID</small>
-                <div id="uidVal" style="font-size: 20px; font-weight: bold;">7613393999</div>
-            </div>
-            <button onclick="playClick(); copyID()" class="btn-main" style="background:#333;">COPY UID</button>
-            <a href="https://youtube.com/@venomshot1" onclick="playClick()" target="_blank" class="btn-main">YOUTUBE</a>
+        <div style="background: #1a1a1a; padding: 20px; border-radius: 20px; border: 1px solid #ff0000; margin: 10px;">
+            <h2 style="color: #ff0000;">USMAN BALOCH</h2>
+            <p>ID: 7613393999</p>
+            <button onclick="copyID()" class="btn-main">Copy UID</button>
         </div>
     </div>
 
-    <div id="game" class="page">
-        <div class="dark-card">
-            <h2 style="color: #ff0000; margin: 0;">TIC-TAC-TOE</h2>
-            <p id="status" style="font-size: 14px;">Player X's Turn</p>
-            <div class="grid" id="board">
-                <div class="cell" onclick="makeMove(this, 0)"></div>
-                <div class="cell" onclick="makeMove(this, 1)"></div>
-                <div class="cell" onclick="makeMove(this, 2)"></div>
-                <div class="cell" onclick="makeMove(this, 3)"></div>
-                <div class="cell" onclick="makeMove(this, 4)"></div>
-                <div class="cell" onclick="makeMove(this, 5)"></div>
-                <div class="cell" onclick="makeMove(this, 6)"></div>
-                <div class="cell" onclick="makeMove(this, 7)"></div>
-                <div class="cell" onclick="makeMove(this, 8)"></div>
+    <div id="shooter" class="page">
+        <h2 style="color: #ff0000; margin-bottom: 5px;">SHOOT THE ENEMY!</h2>
+        <div style="font-size: 18px; margin-bottom: 5px;">Score: <span id="scoreVal">0</span> | Time: <span id="timerVal">20</span>s</div>
+        <div id="game-container" onclick="missShot()">
             </div>
-            <button onclick="resetGame()" class="btn-main" style="background:#333; margin-top: 15px;">Restart Game</button>
-        </div>
-    </div>
-
-    <div id="contact" class="page">
-        <div class="dark-card">
-            <h2 style="color: #ff0000;">CONTACT</h2>
-            <input type="text" id="subject" placeholder="Subject">
-            <textarea id="msg" rows="4" placeholder="Message..."></textarea>
-            <button onclick="sendEmail()" class="btn-main">Send Email 📧</button>
-        </div>
+        <button id="startBtn" onclick="startGame()" class="btn-main">START MISSION</button>
     </div>
 
     <div class="nav-bar">
-        <div class="nav-item active-nav" id="home-btn" onclick="playClick(); showPage('home')">🏠<br>HOME</div>
-        <div class="nav-item" id="game-btn" onclick="playClick(); showPage('game')">🎮<br>GAME</div>
-        <div class="nav-item" id="contact-btn" onclick="playClick(); showPage('contact')">📧<br>EMAIL</div>
+        <div class="nav-item active-nav" id="home-btn" onclick="showPage('home')">🏠<br>HOME</div>
+        <div class="nav-item" id="shooter-btn" onclick="showPage('shooter')">🔫<br>SHOOT</div>
     </div>
 
     <script>
-        function enableAudio() { document.getElementById('startOverlay').style.display = 'none'; playClick(); }
-        function playClick() { let s = document.getElementById('clickSound'); s.currentTime = 0; s.play(); }
+        let score = 0;
+        let timeLeft = 20;
+        let gameActive = false;
+        let timer;
 
+        function enableAudio() { document.getElementById('startOverlay').style.display = 'none'; }
+        
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
@@ -86,45 +65,68 @@
             document.getElementById(pageId + '-btn').classList.add('active-nav');
         }
 
+        function startGame() {
+            if(gameActive) return;
+            score = 0; timeLeft = 20; gameActive = true;
+            document.getElementById('scoreVal').innerText = score;
+            document.getElementById('startBtn').style.display = 'none';
+            
+            spawnTarget();
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timerVal').innerText = timeLeft;
+                if(timeLeft <= 0) endGame();
+            }, 1000);
+        }
+
+        function spawnTarget() {
+            if(!gameActive) return;
+            const container = document.getElementById('game-container');
+            container.innerHTML = '';
+            const target = document.createElement('div');
+            target.className = 'target';
+            
+            // Random Position
+            const x = Math.random() * (container.offsetWidth - 50);
+            const y = Math.random() * (container.offsetHeight - 50);
+            
+            target.style.left = x + 'px';
+            target.style.top = y + 'px';
+            
+            target.onclick = (e) => {
+                e.stopPropagation();
+                hitTarget();
+            };
+            
+            container.appendChild(target);
+        }
+
+        function hitTarget() {
+            if(!gameActive) return;
+            score++;
+            document.getElementById('scoreVal').innerText = score;
+            document.getElementById('shootSound').play();
+            spawnTarget(); // Spawn next
+        }
+
+        function missShot() {
+            if(!gameActive) return;
+            // Gunshot sound even on miss
+            document.getElementById('shootSound').play();
+        }
+
+        function endGame() {
+            gameActive = false;
+            clearInterval(timer);
+            document.getElementById('game-container').innerHTML = '';
+            document.getElementById('startBtn').style.display = 'block';
+            alert("Mission Over! Your Kills: " + score);
+        }
+
         function copyID() {
             navigator.clipboard.writeText("7613393999");
-            alert("UID Copied: 7613393999");
-        }
-
-        function sendEmail() {
-            let sub = document.getElementById('subject').value;
-            let m = document.getElementById('msg').value;
-            if(!sub || !m) return alert("Fill fields!");
-            window.location.href = `mailto:ab8858281@gmail.com?subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(m)}`;
-        }
-
-        // Game Logic
-        let currentPlayer = "X";
-        let gameState = ["", "", "", "", "", "", "", "", ""];
-        function makeMove(cell, idx) {
-            if (gameState[idx] !== "" || !document.getElementById('game').classList.contains('active')) return;
-            playClick();
-            gameState[idx] = currentPlayer;
-            cell.innerText = currentPlayer;
-            cell.style.color = currentPlayer === "X" ? "#ff0000" : "white";
-            if (checkWin()) {
-                document.getElementById('status').innerText = "Player " + currentPlayer + " Wins!";
-                setTimeout(resetGame, 2000);
-            } else {
-                currentPlayer = currentPlayer === "X" ? "O" : "X";
-                document.getElementById('status').innerText = "Player " + currentPlayer + "'s Turn";
-            }
-        }
-        function checkWin() {
-            const win = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-            return win.some(s => gameState[s[0]] && gameState[s[0]] === gameState[s[1]] && gameState[s[0]] === gameState[s[2]]);
-        }
-        function resetGame() {
-            gameState = ["", "", "", "", "", "", "", "", ""];
-            currentPlayer = "X";
-            document.querySelectorAll('.cell').forEach(c => c.innerText = "");
-            document.getElementById('status').innerText = "Player X's Turn";
+            alert("UID Copied!");
         }
     </script>
 </body>
-                </html>
+            </html>
