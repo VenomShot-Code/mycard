@@ -1,64 +1,93 @@
 <!DOCTYPE html>
-<html>
-<body id="bg" style="background: white; text-align: center; transition: 0.5s;">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venom Shot | Pro Gamer</title>
+    <style>
+        /* Glow and Animation Effects */
+        .btn {
+            transition: 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            font-weight: bold;
+            text-align: center;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+            filter: brightness(1.2);
+        }
+        .tracker-btn:active {
+            transform: scale(0.9);
+        }
+    </style>
+</head>
+<body style="background: #0a0a0a; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; color: white;">
 
-  <h1 id="heading" style="color: black;">Coding Mode: Light ☀️</h1>
+    <div style="background: linear-gradient(145deg, #1a1a1a, #000000); padding: 30px; border-radius: 25px; border: 2px solid #ff0000; box-shadow: 0 0 25px rgba(255, 0, 0, 0.3); text-align: center; width: 300px; margin-bottom: 20px;">
+        
+        <img src="https://cdn-icons-png.flaticon.com/512/805/805370.png" width="110" style="border-radius: 50%; border: 3px solid #ff0000; margin-bottom: 15px; box-shadow: 0 0 15px #ff0000;">
 
-  <button onclick="badloMode()" style="padding: 15px; cursor: pointer; border-radius: 10px;">
-    Switch Mode 🔄
-  </button>
+        <h1 style="margin: 0; color: #ff0000; letter-spacing: 2px; text-transform: uppercase;">Venom Shot</h1>
+        <p style="color: #888; margin-top: 5px; font-size: 14px;">YouTube Content Creator & Gamer</p>
 
-  <script>
-    function badloMode() {
-      let body = document.getElementById("bg");
-      let text = document.getElementById("heading");
+        <div style="background: #222; padding: 10px; border-radius: 10px; margin: 20px 0; border-left: 5px solid #ff0000;">
+            <small style="color: #ff0000; font-weight: bold;">MY GAME ID</small>
+            <div style="font-size: 18px; font-weight: bold; letter-spacing: 1px;">761339399</div>
+        </div>
 
-      // Agar background white hai, toh black kar do
-      if (body.style.background == "white") {
-        body.style.background = "black";
-        text.style.color = "white";
-        text.innerHTML = "Coding Mode: Dark 🌙";
-      } 
-      // Warna wapas white kar do
-      else {
-        body.style.background = "white";
-        text.style.color = "black";
-        text.innerHTML = "Coding Mode: Light ☀️";
-      }
-    }
-  </script>
+        <a href="https://youtube.com/@venomshot1?si=1ghpIdCYZPloEk-B" target="_blank" class="btn" style="background: #FF0000; color: white; padding: 12px; border-radius: 10px; margin-bottom: 10px;">
+            SUBSCRIBE YOUTUBE
+        </a>
 
-</body>
-</html>
-<!DOCTYPE html>
-<html>
-<body style="background: #000; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
-
-  <div style="background: linear-gradient(180deg, #1a1a1a 0%, #000 100%); padding: 30px; border-radius: 25px; border: 1px solid #ff0000; box-shadow: 0 0 30px rgba(255, 0, 0, 0.2); text-align: center; width: 300px; color: white;">
-    
-    <div style="position: relative; display: inline-block;">
-        <img src="https://cdn-icons-png.flaticon.com/512/805/805370.png" width="120" style="border-radius: 20px; border: 2px solid #ff0000; margin-bottom: 10px;">
-        <div style="position: absolute; bottom: 15px; right: -5px; background: #ff0000; color: white; padding: 2px 8px; border-radius: 5px; font-size: 10px; font-weight: bold;">LIVE</div>
+        <a href="https://wa.me/yournumber" class="btn" style="background: #25D366; color: white; padding: 10px; border-radius: 8px; font-size: 14px;">
+            WhatsApp Me
+        </a>
     </div>
 
-    <h2 style="margin: 0; color: #ff0000; text-transform: uppercase;">Venom Shot</h2>
-    <p style="color: #888; margin-top: 5px;">Pro Gamer & YouTuber</p>
+    <div style="background: #151515; padding: 25px; border-radius: 20px; border: 1px solid #333; text-align: center; width: 300px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);">
+        <h3 style="color: #ff0000; margin-top: 0; font-size: 16px;">TODAY'S KILLS 💀</h3>
+        
+        <div id="score" style="font-size: 60px; font-weight: bold; color: white; text-shadow: 0 0 10px rgba(255,255,255,0.2);">0</div>
+        
+        <div style="display: flex; justify-content: center; gap: 15px; margin-top: 10px;">
+            <button onclick="changeScore(1)" class="btn tracker-btn" style="flex: 1; padding: 12px; background: #ff0000; color: white; border: none; border-radius: 8px; font-weight: bold;">+ KILL</button>
+            <button onclick="changeScore(-1)" class="btn tracker-btn" style="padding: 12px; background: #333; color: white; border: none; border-radius: 8px;">-1</button>
+        </div>
+        
+        <button onclick="resetScore()" style="margin-top: 20px; background: transparent; color: #555; border: none; cursor: pointer; font-size: 12px; text-decoration: underline;">Reset Session</button>
+    </div>
 
-    <div style="background: #222; padding: 10px; border-radius: 10px; margin: 20px 0; border-left: 5px solid #ff0000;">
-        <small style="color: #ff0000; font-weight: bold;">GAME ID:</small>
-        <div style="font-size: 18px; font-weight: bold; letter-spacing: 1px;">7613393999</div> </div>
+    <script>
+        let count = 0;
+        let scoreDisplay = document.getElementById("score");
 
-    <a href="https://youtube.com/@venomshot1?si=1ghpIdCYZPloEk-B" target="_blank" style="text-decoration: none;">
-      <div style="background: #ff0000; color: white; padding: 12px; border-radius: 10px; margin-bottom: 10px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px;">
-         Subscribe YouTube
-      </div>
-    </a>
+        function changeScore(points) {
+            count = count + points;
+            if (count < 0) count = 0;
+            scoreDisplay.innerHTML = count;
+            
+            // Animation effect on score change
+            if (count >= 10) {
+                scoreDisplay.style.color = "#FFD700"; // Gold color for 10+ kills
+                scoreDisplay.style.textShadow = "0 0 20px #FFD700";
+            } else {
+                scoreDisplay.style.color = "white";
+                scoreDisplay.style.textShadow = "none";
+            }
+        }
 
-    <button onclick="alert('ID Copied!')" style="width: 100%; background: transparent; color: #ff0000; border: 1px solid #ff0000; padding: 10px; border-radius: 10px; cursor: pointer; font-weight: bold;">
-        Copy Game ID
-    </button>
-
-  </div>
+        function resetScore() {
+            if(confirm("Kya aap score reset karna chahte hain?")) {
+                count = 0;
+                scoreDisplay.innerHTML = count;
+                scoreDisplay.style.color = "white";
+                scoreDisplay.style.textShadow = "none";
+            }
+        }
+    </script>
 
 </body>
 </html>
