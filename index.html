@@ -5,47 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Venom Shot Pro</title>
     <style>
-        body { transition: 0.5s; margin: 0; padding-bottom: 70px; display: flex; flex-direction: column; align-items: center; font-family: sans-serif; }
-        .dark-mode { background: #0a0a0a; color: white; }
-        .light-mode { background: #f0f0f0; color: #1a1a1a; }
-        .dark-card { background: #1a1a1a; border: 2px solid #ff0000; box-shadow: 0 0 20px rgba(255,0,0,0.2); }
-        .light-card { background: white; border: 2px solid #333; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        body { transition: 0.5s; margin: 0; padding-bottom: 70px; display: flex; flex-direction: column; align-items: center; font-family: sans-serif; background: #0a0a0a; color: white; }
         .page { display: none; width: 320px; animation: fadeIn 0.5s; margin-top: 20px; }
         .active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .dark-card { background: #1a1a1a; border: 2px solid #ff0000; padding: 30px; border-radius: 25px; text-align: center; }
         .nav-bar { position: fixed; bottom: 0; width: 100%; background: #1a1a1a; display: flex; justify-content: space-around; padding: 15px 0; border-top: 2px solid #ff0000; }
         .nav-item { color: #888; cursor: pointer; font-size: 12px; font-weight: bold; }
         .active-nav { color: #ff0000; }
-        input, textarea { width: 100%; padding: 10px; margin: 10px 0; background: #222; border: 1px solid #333; color: white; border-radius: 8px; box-sizing: border-box; }
-        .btn-main { background: #ff0000; color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .btn-main { background: #ff0000; color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
-<body class="dark-mode" id="mainBody">
+<body>
 
-    <audio id="clickSound" src="https://www.soundjay.com/buttons/button-16.mp3"></audio>
-    <audio id="successSound" src="https://www.soundjay.com/buttons/button-09.mp3"></audio>
+    <audio id="clickSound">
+        <source src="https://actions.google.com/sounds/v1/foley/button_click.ogg" type="audio/ogg">
+    </audio>
+    <audio id="successSound">
+        <source src="https://actions.google.com/sounds/v1/cartoon/clown_horn.ogg" type="audio/ogg">
+    </audio>
 
-    <button onclick="playClick(); toggleMode()" style="margin-top: 20px; padding: 8px 15px; border-radius: 20px; border: none; cursor: pointer; font-weight: bold; background: #ff0000; color: white;">
-        ☀️ / 🌙 Change Mode
-    </button>
+    <div id="startOverlay" style="position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:999; display:flex; justify-content:center; align-items:center;">
+        <button onclick="enableAudio()" style="padding: 20px 40px; background:#ff0000; color:white; border:none; border-radius:10px; font-size:20px; font-weight:bold; cursor:pointer;">ENTER GAMER ZONE 🎮</button>
+    </div>
 
     <div id="home" class="page active">
-        <div id="cardBox" class="dark-card" style="padding: 30px; border-radius: 25px; text-align: center;">
+        <div class="dark-card">
             <img src="https://cdn-icons-png.flaticon.com/512/805/805370.png" width="100" style="border-radius: 50%; border: 2px solid #ff0000;">
             <h2 style="color: #ff0000; margin: 10px 0;">VENOM SHOT</h2>
-            <p style="font-size: 14px;">Gamer & Coder</p>
-            <button onclick="playClick(); copyID()" style="background: #333; color: white; border: none; padding: 8px; border-radius: 5px; cursor: pointer;">Copy ID: 7613393999</button>
+            <button onclick="playClick(); copyID()" class="btn-main" style="background:#333;">Copy ID: 7613393999</button>
             <br><br>
-            <a href="https://youtube.com/@venomshot1" onclick="playClick()" target="_blank" style="background: #ff0000; color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: bold; display: block;">Subscribe YouTube</a>
+            <a href="https://youtube.com/@venomshot1" onclick="playClick()" target="_blank" style="text-decoration:none;" class="btn-main">YouTube</a>
         </div>
     </div>
 
     <div id="contact" class="page">
-        <div id="formBox" class="dark-card" style="padding: 30px; border-radius: 25px;">
-            <h2 style="color: #ff0000; text-align: center;">SEND EMAIL</h2>
-            <input type="text" id="subject" placeholder="Topic">
-            <textarea id="msg" rows="4" placeholder="Message..."></textarea>
-            <button onclick="sendEmail()" class="btn-main">Send to Venom 📧</button>
+        <div class="dark-card">
+            <h2 style="color: #ff0000;">SEND EMAIL</h2>
+            <input type="text" id="subject" placeholder="Topic" style="width:100%; padding:10px; margin-bottom:10px; border-radius:5px; border:none;">
+            <textarea id="msg" rows="4" placeholder="Message..." style="width:100%; padding:10px; border-radius:5px; border:none;"></textarea>
+            <button onclick="sendEmail()" class="btn-main">Send Email 📧</button>
         </div>
     </div>
 
@@ -55,33 +53,27 @@
     </div>
 
     <script>
+        // Browser protection bypass
+        function enableAudio() {
+            document.getElementById('startOverlay').style.display = 'none';
+            playClick(); // Test sound
+        }
+
         function playClick() {
-            document.getElementById('clickSound').play();
+            let sound = document.getElementById('clickSound');
+            sound.currentTime = 0; // Reset sound to start
+            sound.play();
         }
 
         function playSuccess() {
             document.getElementById('successSound').play();
         }
 
-        function toggleMode() {
-            let body = document.getElementById('mainBody');
-            let card = document.getElementById('cardBox');
-            let form = document.getElementById('formBox');
-            if (body.classList.contains('dark-mode')) {
-                body.classList.replace('dark-mode', 'light-mode');
-                card.classList.replace('dark-card', 'light-card');
-                form.classList.replace('dark-card', 'light-card');
-            } else {
-                body.classList.replace('light-mode', 'dark-mode');
-                card.classList.replace('light-card', 'dark-card');
-                form.classList.replace('light-card', 'dark-card');
-            }
-        }
-
         function showPage(pageId) {
             document.getElementById('home').classList.remove('active');
             document.getElementById('contact').classList.remove('active');
             document.getElementById(pageId).classList.add('active');
+            
             document.getElementById('home-btn').classList.remove('active-nav');
             document.getElementById('contact-btn').classList.remove('active-nav');
             document.getElementById(pageId + '-btn').classList.add('active-nav');
@@ -106,4 +98,4 @@
         }
     </script>
 </body>
-                </html>
+    </html>
