@@ -10,16 +10,16 @@
         .active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
-        /* Shooting Game Styles */
         #game-container { width: 90%; height: 300px; background: #111; border: 2px solid #ff0000; position: relative; margin: 15px auto; overflow: hidden; border-radius: 15px; cursor: crosshair; box-shadow: 0 0 15px rgba(255, 0, 0, 0.3); }
         .target { width: 45px; height: 45px; background: url('https://cdn-icons-png.flaticon.com/512/805/805370.png'); background-size: cover; position: absolute; border-radius: 50%; border: 2px solid #ff0000; transition: 0.1s; }
         
-        /* Layout Styles */
         .nav-bar { position: fixed; bottom: 0; width: 100%; background: #1a1a1a; display: flex; justify-content: space-around; padding: 15px 0; border-top: 2px solid #ff0000; z-index: 100; }
         .nav-item { color: #888; cursor: pointer; font-size: 10px; font-weight: bold; text-align: center; }
         .active-nav { color: #ff0000; }
         .btn-main { background: #ff0000; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; margin: 5px; text-decoration: none; display: inline-block; }
         .dark-card { background: #1a1a1a; padding: 30px; border-radius: 25px; border: 2px solid #ff0000; text-align: center; margin: 10px; }
+        
+        #rankBox { font-size: 20px; font-weight: bold; color: gold; text-shadow: 0 0 10px gold; margin-bottom: 10px; }
     </style>
 </head>
 <body id="mainBody">
@@ -33,30 +33,26 @@
 
     <div id="home" class="page active">
         <div class="dark-card">
-            <img src="https://cdn-icons-png.flaticon.com/512/805/805370.png" width="110" style="border-radius: 50%; border: 3px solid #ff0000; box-shadow: 0 0 15px #ff0000;">
-            <h1 style="color: #ff0000; margin: 10px 0;">VENOMSHOT</h1>
-            <div style="background: #000; padding: 10px; border-radius: 10px; border: 1px dashed #ff0000; margin-bottom: 20px;">
-                <small style="color: #ff0000; font-weight: bold;">PLAYER UID</small>
-                <div style="font-size: 20px; font-weight: bold;">7613393999</div>
-            </div>
+            <img src="https://cdn-icons-png.flaticon.com/512/805/805370.png" width="110" style="border-radius: 50%; border: 3px solid #ff0000;">
+            <h1 style="color: #ff0000;">VENOMSHOT</h1>
+            <p>UID: 7613393999</p>
             <button onclick="copyID()" class="btn-main" style="background:#333;">Copy UID</button>
             <a href="https://youtube.com/@venomshot1" target="_blank" class="btn-main">YouTube</a>
         </div>
     </div>
 
     <div id="shooter" class="page">
-        <h2 style="color: #ff0000; margin: 0;">AIM & FIRE</h2>
-        <div style="font-size: 18px; margin: 10px 0;">Kills: <span id="scoreVal" style="color: #ff0000; font-weight: bold;">0</span> | Time: <span id="timerVal">20</span>s</div>
-        <div id="game-container" onclick="missShot()">
-            </div>
+        <div id="rankBox">RANK: BRONZE 🥉</div>
+        <div style="font-size: 18px;">Kills: <span id="scoreVal" style="color: #ff0000; font-weight: bold;">0</span> | Time: <span id="timerVal">20</span>s</div>
+        <div id="game-container" onclick="missShot()"></div>
         <button id="startBtn" onclick="startGame()" class="btn-main" style="width: 80%;">START GAME</button>
     </div>
 
     <div id="contact" class="page">
         <div class="dark-card">
-            <h2 style="color: #ff0000;">CONTACT ME</h2>
-            <input type="text" id="subject" placeholder="Subject" style="width:100%; padding:10px; margin-bottom:10px; background:#222; border:1px solid #333; color:white; border-radius:5px;">
-            <textarea id="msg" rows="4" placeholder="Your Message..." style="width:100%; padding:10px; background:#222; border:1px solid #333; color:white; border-radius:5px; margin-bottom:10px;"></textarea>
+            <h2>CONTACT ME</h2>
+            <input type="text" id="subject" placeholder="Subject" style="width:100%; padding:10px; margin-bottom:10px; background:#222; border:1px solid #333; color:white;">
+            <textarea id="msg" rows="4" placeholder="Message..." style="width:100%; padding:10px; background:#222; border:1px solid #333; color:white;"></textarea>
             <button onclick="sendEmail()" class="btn-main" style="width:100%;">Send Email 📧</button>
         </div>
     </div>
@@ -75,11 +71,17 @@
 
         function enableAudio() { document.getElementById('startOverlay').style.display = 'none'; }
         
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
-            document.getElementById(pageId).classList.add('active');
-            document.getElementById(pageId + '-btn').classList.add('active-nav');
+        function updateRank() {
+            let rankText = "BRONZE 🥉";
+            let color = "#cd7f32";
+            if (score > 25) { rankText = "GRANDMASTER 👑"; color = "#00ffff"; }
+            else if (score > 15) { rankText = "HEROIC 🔥"; color = "#ff00ff"; }
+            else if (score > 5) { rankText = "GOLD 🥇"; color = "gold"; }
+            
+            let rb = document.getElementById('rankBox');
+            rb.innerText = "RANK: " + rankText;
+            rb.style.color = color;
+            rb.style.textShadow = "0 0 10px " + color;
         }
 
         function startGame() {
@@ -87,6 +89,7 @@
             score = 0; timeLeft = 20; gameActive = true;
             document.getElementById('scoreVal').innerText = score;
             document.getElementById('startBtn').style.display = 'none';
+            updateRank();
             spawnTarget();
             timer = setInterval(() => {
                 timeLeft--;
@@ -103,8 +106,7 @@
             target.className = 'target';
             const x = Math.random() * (container.offsetWidth - 55);
             const y = Math.random() * (container.offsetHeight - 55);
-            target.style.left = x + 'px';
-            target.style.top = y + 'px';
+            target.style.left = x + 'px'; target.style.top = y + 'px';
             target.onclick = (e) => { e.stopPropagation(); hitTarget(); };
             container.appendChild(target);
         }
@@ -113,36 +115,37 @@
             if(!gameActive) return;
             score++;
             document.getElementById('scoreVal').innerText = score;
+            updateRank();
             document.getElementById('shootSound').currentTime = 0;
             document.getElementById('shootSound').play();
             spawnTarget();
         }
 
-        function missShot() {
-            if(!gameActive) return;
-            document.getElementById('shootSound').currentTime = 0;
-            document.getElementById('shootSound').play();
-        }
+        function missShot() { if(gameActive) { document.getElementById('shootSound').currentTime = 0; document.getElementById('shootSound').play(); } }
 
         function endGame() {
             gameActive = false;
             clearInterval(timer);
             document.getElementById('game-container').innerHTML = '';
             document.getElementById('startBtn').style.display = 'inline-block';
-            alert("Match Finished! Total Kills: " + score);
+            alert("Match End! Kills: " + score);
         }
 
-        function copyID() {
-            navigator.clipboard.writeText("7613393999");
-            alert("UID Copied: 7613393999");
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
+            document.getElementById(pageId).classList.add('active');
+            document.getElementById(pageId + '-btn').classList.add('active-nav');
         }
+
+        function copyID() { navigator.clipboard.writeText("7613393999"); alert("UID Copied!"); }
 
         function sendEmail() {
             let sub = document.getElementById('subject').value;
             let m = document.getElementById('msg').value;
-            if(!sub || !m) return alert("Please fill all fields!");
+            if(!sub || !m) return alert("Fill all fields!");
             window.location.href = `mailto:ab8858281@gmail.com?subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(m)}`;
         }
     </script>
 </body>
-    </html>
+            </html>
