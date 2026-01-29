@@ -3,64 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VENOMSHOT | Pro Gamer</title>
+    <title>VENOMSHOT | Ultra Gamer</title>
     <style>
-        body { transition: 0.5s; margin: 0; padding-bottom: 80px; display: flex; flex-direction: column; align-items: center; font-family: sans-serif; background: #0a0a0a; color: white; overflow-x: hidden; }
-        .page { display: none; width: 100%; max-width: 400px; animation: fadeIn 0.5s; margin-top: 20px; text-align: center; }
+        body { transition: 0.5s; margin: 0; padding-bottom: 80px; display: flex; flex-direction: column; align-items: center; font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: white; overflow-x: hidden; }
+        .page { display: none; width: 100%; max-width: 400px; animation: fadeIn 0.4s; margin-top: 20px; text-align: center; }
         .active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         
-        #game-container { width: 90%; height: 300px; background: #111; border: 2px solid #ff0000; position: relative; margin: 15px auto; overflow: hidden; border-radius: 15px; cursor: crosshair; box-shadow: 0 0 15px rgba(255, 0, 0, 0.3); }
-        .target { width: 45px; height: 45px; background: url('https://cdn-icons-png.flaticon.com/512/805/805370.png'); background-size: cover; position: absolute; border-radius: 50%; border: 2px solid #ff0000; transition: 0.1s; }
+        /* Game Effects */
+        #game-container { width: 90%; height: 320px; background: radial-gradient(circle, #222, #000); border: 3px solid #ff0000; position: relative; margin: 15px auto; overflow: hidden; border-radius: 20px; cursor: crosshair; box-shadow: 0 0 25px rgba(255, 0, 0, 0.4); }
+        .target { width: 50px; height: 50px; background: url('https://cdn-icons-png.flaticon.com/512/805/805370.png'); background-size: cover; position: absolute; border-radius: 50%; border: 2px solid #ff0000; filter: drop-shadow(0 0 10px red); }
         
-        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #1a1a1a; display: flex; justify-content: space-around; padding: 15px 0; border-top: 2px solid #ff0000; z-index: 100; }
-        .nav-item { color: #888; cursor: pointer; font-size: 10px; font-weight: bold; text-align: center; }
-        .active-nav { color: #ff0000; }
-        .btn-main { background: #ff0000; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; margin: 5px; text-decoration: none; display: inline-block; }
-        .dark-card { background: #1a1a1a; padding: 30px; border-radius: 25px; border: 2px solid #ff0000; text-align: center; margin: 10px; }
+        /* Shake Animation */
+        .shake { animation: shake 0.2s; }
+        @keyframes shake { 0% { transform: translate(1px, 1px); } 50% { transform: translate(-2px, -1px); } 100% { transform: translate(0, 0); } }
+
+        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #151515; display: flex; justify-content: space-around; padding: 12px 0; border-top: 3px solid #ff0000; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); }
+        .nav-item { color: #666; cursor: pointer; font-size: 11px; font-weight: bold; text-transform: uppercase; }
+        .active-nav { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
         
-        #rankBox { font-size: 20px; font-weight: bold; color: gold; text-shadow: 0 0 10px gold; margin-bottom: 10px; }
+        .btn-main { background: linear-gradient(to bottom, #ff4444, #cc0000); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: bold; cursor: pointer; margin: 8px; width: 85%; transition: 0.2s; }
+        .btn-main:active { transform: scale(0.95); }
+        .dark-card { background: #151515; padding: 25px; border-radius: 30px; border: 1px solid #333; margin: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
     </style>
 </head>
 <body id="mainBody">
 
     <audio id="shootSound"><source src="https://www.soundjay.com/mechanical/gun-gunshot-01.mp3" type="audio/mp3"></audio>
 
-    <div id="startOverlay" style="position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:999; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-        <h1 style="color: #ff0000; letter-spacing: 5px;">VENOMSHOT</h1>
-        <button onclick="enableAudio()" style="padding: 15px 30px; background:#ff0000; color:white; border:none; border-radius:10px; font-size:18px; font-weight:bold; cursor:pointer; box-shadow: 0 0 20px #ff0000;">LOAD MISSION ⚔️</button>
+    <div id="startOverlay" style="position: fixed; top:0; left:0; width:100%; height:100%; background:black; z-index:999; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align: center;">
+        <h1 style="color: #ff0000; font-size: 40px; margin: 0;">VENOMSHOT</h1>
+        <p style="color: #555; letter-spacing: 2px;">ULTRA GAMING HUB</p>
+        <button onclick="enableAudio()" style="margin-top: 30px; padding: 15px 40px; background:#ff0000; color:white; border:none; border-radius:50px; font-size:20px; font-weight:bold; cursor:pointer; box-shadow: 0 0 30px #ff0000;">ENTER ARENA</button>
     </div>
 
     <div id="home" class="page active">
         <div class="dark-card">
-            <img src="https://cdn-icons-png.flaticon.com/512/805/805370.png" width="110" style="border-radius: 50%; border: 3px solid #ff0000;">
-            <h1 style="color: #ff0000;">VENOMSHOT</h1>
-            <p>UID: 7613393999</p>
-            <button onclick="copyID()" class="btn-main" style="background:#333;">Copy UID</button>
-            <a href="https://youtube.com/@venomshot1" target="_blank" class="btn-main">YouTube</a>
+            <img src="https://cdn-icons-png.flaticon.com/512/805/805370.png" width="100" style="border: 3px solid #ff0000; border-radius: 50%; padding: 5px;">
+            <h1 style="color: #ff0000; margin: 10px 0; font-size: 28px;">VENOMSHOT</h1>
+            <div style="background: #000; padding: 12px; border-radius: 15px; border-left: 5px solid #ff0000; margin: 15px 0;">
+                <small style="color: #888;">PLAYER UID</small><br>
+                <b style="font-size: 22px; letter-spacing: 1px;">7613393999</b>
+            </div>
+            <button onclick="copyID()" class="btn-main">COPY UID</button>
+            <a href="https://youtube.com/@venomshot1" target="_blank" class="btn-main" style="background: #222;">YOUTUBE CHANNEL</a>
         </div>
     </div>
 
     <div id="shooter" class="page">
-        <div id="rankBox">RANK: BRONZE 🥉</div>
-        <div style="font-size: 18px;">Kills: <span id="scoreVal" style="color: #ff0000; font-weight: bold;">0</span> | Time: <span id="timerVal">20</span>s</div>
+        <div id="rankBox" style="font-size: 22px; font-weight: 900; color: gold; margin-bottom: 5px;">RANK: BRONZE 🥉</div>
+        <div style="background: #222; padding: 5px 15px; border-radius: 20px; display: inline-block; margin-bottom: 10px;">
+            Kills: <b id="scoreVal" style="color: #ff0000;">0</b> | Best: <b id="bestVal" style="color: #00ff00;">0</b>
+        </div>
         <div id="game-container" onclick="missShot()"></div>
-        <button id="startBtn" onclick="startGame()" class="btn-main" style="width: 80%;">START GAME</button>
+        <div style="font-size: 20px; font-weight: bold;">TIME: <span id="timerVal">20</span>s</div>
+        <button id="startBtn" onclick="startGame()" class="btn-main">START MATCH</button>
     </div>
 
     <div id="contact" class="page">
         <div class="dark-card">
-            <h2>CONTACT ME</h2>
-            <input type="text" id="subject" placeholder="Subject" style="width:100%; padding:10px; margin-bottom:10px; background:#222; border:1px solid #333; color:white;">
-            <textarea id="msg" rows="4" placeholder="Message..." style="width:100%; padding:10px; background:#222; border:1px solid #333; color:white;"></textarea>
-            <button onclick="sendEmail()" class="btn-main" style="width:100%;">Send Email 📧</button>
+            <h2 style="color: #ff0000;">SEND MESSAGE</h2>
+            <input type="text" id="subject" placeholder="Topic" style="width:90%; padding:12px; margin:10px 0; background:#000; border:1px solid #444; color:white; border-radius:10px;">
+            <textarea id="msg" rows="4" placeholder="Type message..." style="width:90%; padding:12px; background:#000; border:1px solid #444; color:white; border-radius:10px;"></textarea>
+            <button onclick="sendEmail()" class="btn-main">SEND EMAIL</button>
         </div>
     </div>
 
     <div class="nav-bar">
         <div class="nav-item active-nav" id="home-btn" onclick="showPage('home')">🏠<br>HOME</div>
-        <div class="nav-item" id="shooter-btn" onclick="showPage('shooter')">🔫<br>SHOOT</div>
-        <div class="nav-item" id="contact-btn" onclick="showPage('contact')">📧<br>EMAIL</div>
+        <div class="nav-item" id="shooter-btn" onclick="showPage('shooter')">🔫<br>ARENA</div>
+        <div class="nav-item" id="contact-btn" onclick="showPage('contact')">📧<br>MAIL</div>
     </div>
 
     <script>
@@ -68,29 +80,32 @@
         let timeLeft = 20;
         let gameActive = false;
         let timer;
+        let bestScore = localStorage.getItem('vShotBest') || 0;
+        document.getElementById('bestVal').innerText = bestScore;
 
         function enableAudio() { document.getElementById('startOverlay').style.display = 'none'; }
-        
+        function showPage(pId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
+            document.getElementById(pId).classList.add('active');
+            document.getElementById(pId + '-btn').classList.add('active-nav');
+        }
+
         function updateRank() {
-            let rankText = "BRONZE 🥉";
-            let color = "#cd7f32";
-            if (score > 25) { rankText = "GRANDMASTER 👑"; color = "#00ffff"; }
-            else if (score > 15) { rankText = "HEROIC 🔥"; color = "#ff00ff"; }
-            else if (score > 5) { rankText = "GOLD 🥇"; color = "gold"; }
-            
-            let rb = document.getElementById('rankBox');
-            rb.innerText = "RANK: " + rankText;
-            rb.style.color = color;
-            rb.style.textShadow = "0 0 10px " + color;
+            let r = "BRONZE 🥉", c = "#cd7f32";
+            if(score > 25) { r = "GRANDMASTER 👑"; c = "#00ffff"; }
+            else if(score > 15) { r = "HEROIC 🔥"; c = "#ff00ff"; }
+            else if(score > 5) { r = "GOLD 🥇"; c = "gold"; }
+            document.getElementById('rankBox').innerText = "RANK: " + r;
+            document.getElementById('rankBox').style.color = c;
         }
 
         function startGame() {
             if(gameActive) return;
             score = 0; timeLeft = 20; gameActive = true;
             document.getElementById('scoreVal').innerText = score;
-            document.getElementById('startBtn').style.display = 'none';
-            updateRank();
-            spawnTarget();
+            document.getElementById('startBtn').style.visibility = 'hidden';
+            updateRank(); spawnTarget();
             timer = setInterval(() => {
                 timeLeft--;
                 document.getElementById('timerVal').innerText = timeLeft;
@@ -100,52 +115,45 @@
 
         function spawnTarget() {
             if(!gameActive) return;
-            const container = document.getElementById('game-container');
-            container.innerHTML = '';
-            const target = document.createElement('div');
-            target.className = 'target';
-            const x = Math.random() * (container.offsetWidth - 55);
-            const y = Math.random() * (container.offsetHeight - 55);
-            target.style.left = x + 'px'; target.style.top = y + 'px';
-            target.onclick = (e) => { e.stopPropagation(); hitTarget(); };
-            container.appendChild(target);
+            const gc = document.getElementById('game-container');
+            gc.innerHTML = '';
+            const t = document.createElement('div');
+            t.className = 'target';
+            t.style.left = Math.random() * (gc.offsetWidth - 60) + 'px';
+            t.style.top = Math.random() * (gc.offsetHeight - 60) + 'px';
+            t.onclick = (e) => { e.stopPropagation(); hitTarget(); };
+            gc.appendChild(t);
         }
 
         function hitTarget() {
-            if(!gameActive) return;
             score++;
             document.getElementById('scoreVal').innerText = score;
-            updateRank();
-            document.getElementById('shootSound').currentTime = 0;
-            document.getElementById('shootSound').play();
-            spawnTarget();
+            document.getElementById('game-container').classList.add('shake');
+            setTimeout(() => document.getElementById('game-container').classList.remove('shake'), 200);
+            playGun(); updateRank(); spawnTarget();
         }
 
-        function missShot() { if(gameActive) { document.getElementById('shootSound').currentTime = 0; document.getElementById('shootSound').play(); } }
+        function missShot() { if(gameActive) playGun(); }
+        function playGun() { let s = document.getElementById('shootSound'); s.currentTime = 0; s.play(); }
 
         function endGame() {
-            gameActive = false;
-            clearInterval(timer);
+            gameActive = false; clearInterval(timer);
             document.getElementById('game-container').innerHTML = '';
-            document.getElementById('startBtn').style.display = 'inline-block';
-            alert("Match End! Kills: " + score);
-        }
-
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
-            document.getElementById(pageId).classList.add('active');
-            document.getElementById(pageId + '-btn').classList.add('active-nav');
+            document.getElementById('startBtn').style.visibility = 'visible';
+            if(score > bestScore) {
+                bestScore = score;
+                localStorage.setItem('vShotBest', bestScore);
+                document.getElementById('bestVal').innerText = bestScore;
+                alert("NEW RECORD! Kills: " + score);
+            } else { alert("Match Over! Kills: " + score); }
         }
 
         function copyID() { navigator.clipboard.writeText("7613393999"); alert("UID Copied!"); }
-
         function sendEmail() {
-            let sub = document.getElementById('subject').value;
-            let m = document.getElementById('msg').value;
-            if(!sub || !m) return alert("Fill all fields!");
-            window.location.href = `mailto:ab8858281@gmail.com?subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(m)}`;
+            let s = document.getElementById('subject').value, m = document.getElementById('msg').value;
+            if(!s || !m) return alert("Fill fields!");
+            window.location.href = `mailto:ab8858281@gmail.com?subject=${encodeURIComponent(s)}&body=${encodeURIComponent(m)}`;
         }
     </script>
 </body>
-            </html>
+    </html>
