@@ -5,43 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Venom Shot Pro</title>
     <style>
-        /* Transitions for smooth mode switching */
         body { transition: 0.5s; margin: 0; padding-bottom: 70px; display: flex; flex-direction: column; align-items: center; font-family: sans-serif; }
-        
-        /* Dark Mode Colors */
         .dark-mode { background: #0a0a0a; color: white; }
-        .dark-card { background: #1a1a1a; border: 2px solid #ff0000; }
-        
-        /* Light Mode Colors */
         .light-mode { background: #f0f0f0; color: #1a1a1a; }
+        .dark-card { background: #1a1a1a; border: 2px solid #ff0000; box-shadow: 0 0 20px rgba(255,0,0,0.2); }
         .light-card { background: white; border: 2px solid #333; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-
         .page { display: none; width: 320px; animation: fadeIn 0.5s; margin-top: 20px; }
         .active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
         .nav-bar { position: fixed; bottom: 0; width: 100%; background: #1a1a1a; display: flex; justify-content: space-around; padding: 15px 0; border-top: 2px solid #ff0000; }
         .nav-item { color: #888; cursor: pointer; font-size: 12px; font-weight: bold; }
         .active-nav { color: #ff0000; }
-
         input, textarea { width: 100%; padding: 10px; margin: 10px 0; background: #222; border: 1px solid #333; color: white; border-radius: 8px; box-sizing: border-box; }
         .btn-main { background: #ff0000; color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body class="dark-mode" id="mainBody">
 
-    <button onclick="toggleMode()" style="margin-top: 20px; padding: 5px 15px; border-radius: 20px; border: none; cursor: pointer; font-weight: bold; background: #ff0000; color: white;">
+    <audio id="clickSound" src="https://www.soundjay.com/buttons/button-16.mp3"></audio>
+    <audio id="successSound" src="https://www.soundjay.com/buttons/button-09.mp3"></audio>
+
+    <button onclick="playClick(); toggleMode()" style="margin-top: 20px; padding: 8px 15px; border-radius: 20px; border: none; cursor: pointer; font-weight: bold; background: #ff0000; color: white;">
         ☀️ / 🌙 Change Mode
     </button>
 
     <div id="home" class="page active">
         <div id="cardBox" class="dark-card" style="padding: 30px; border-radius: 25px; text-align: center;">
             <img src="https://cdn-icons-png.flaticon.com/512/805/805370.png" width="100" style="border-radius: 50%; border: 2px solid #ff0000;">
-            <h2 id="userName" style="color: #ff0000; margin: 10px 0;">VENOM SHOT</h2>
+            <h2 style="color: #ff0000; margin: 10px 0;">VENOM SHOT</h2>
             <p style="font-size: 14px;">Gamer & Coder</p>
-            <button onclick="copyID()" style="background: #333; color: white; border: none; padding: 8px; border-radius: 5px; cursor: pointer;">Copy ID: 761339399</button>
+            <button onclick="playClick(); copyID()" style="background: #333; color: white; border: none; padding: 8px; border-radius: 5px; cursor: pointer;">Copy ID: 7613393999</button>
             <br><br>
-            <a href="https://youtube.com/@venomshot1" style="background: #ff0000; color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: bold; display: block;">Subscribe YouTube</a>
+            <a href="https://youtube.com/@venomshot1" onclick="playClick()" target="_blank" style="background: #ff0000; color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: bold; display: block;">Subscribe YouTube</a>
         </div>
     </div>
 
@@ -55,23 +50,28 @@
     </div>
 
     <div class="nav-bar">
-        <div class="nav-item active-nav" id="home-btn" onclick="showPage('home')">🏠 HOME</div>
-        <div class="nav-item" id="contact-btn" onclick="showPage('contact')">📧 EMAIL</div>
+        <div class="nav-item active-nav" id="home-btn" onclick="playClick(); showPage('home')">🏠 HOME</div>
+        <div class="nav-item" id="contact-btn" onclick="playClick(); showPage('contact')">📧 EMAIL</div>
     </div>
 
     <script>
+        function playClick() {
+            document.getElementById('clickSound').play();
+        }
+
+        function playSuccess() {
+            document.getElementById('successSound').play();
+        }
+
         function toggleMode() {
             let body = document.getElementById('mainBody');
             let card = document.getElementById('cardBox');
             let form = document.getElementById('formBox');
-
             if (body.classList.contains('dark-mode')) {
-                // Switch to Light
                 body.classList.replace('dark-mode', 'light-mode');
                 card.classList.replace('dark-card', 'light-card');
                 form.classList.replace('dark-card', 'light-card');
             } else {
-                // Switch to Dark
                 body.classList.replace('light-mode', 'dark-mode');
                 card.classList.replace('light-card', 'dark-card');
                 form.classList.replace('light-card', 'dark-card');
@@ -82,7 +82,6 @@
             document.getElementById('home').classList.remove('active');
             document.getElementById('contact').classList.remove('active');
             document.getElementById(pageId).classList.add('active');
-            
             document.getElementById('home-btn').classList.remove('active-nav');
             document.getElementById('contact-btn').classList.remove('active-nav');
             document.getElementById(pageId + '-btn').classList.add('active-nav');
@@ -91,13 +90,14 @@
         function sendEmail() {
             let subject = document.getElementById('subject').value;
             let msg = document.getElementById('msg').value;
-            let myEmail = "ab8858281@gmail.com"; 
-
             if(subject == "" || msg == "") {
                 alert("Please fill all fields!");
                 return;
             }
-            window.location.href = "mailto:" + myEmail + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(msg);
+            playSuccess();
+            setTimeout(() => {
+                window.location.href = "mailto:ab8858281@gmail.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(msg);
+            }, 500);
         }
 
         function copyID() {
@@ -106,4 +106,4 @@
         }
     </script>
 </body>
-        </html>
+                </html>
