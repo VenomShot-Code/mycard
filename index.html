@@ -3,93 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Venom Shot | Pro Gamer</title>
+    <title>Venom Shot Pro</title>
     <style>
-        .btn {
-            transition: 0.3s;
-            cursor: pointer;
-            text-decoration: none;
-            display: block;
-            font-weight: bold;
-            text-align: center;
-            border: none;
-        }
-        .btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
-            filter: brightness(1.2);
-        }
-        .tracker-btn:active { transform: scale(0.9); }
+        /* Transitions for smooth mode switching */
+        body { transition: 0.5s; margin: 0; padding-bottom: 70px; display: flex; flex-direction: column; align-items: center; font-family: sans-serif; }
+        
+        /* Dark Mode Colors */
+        .dark-mode { background: #0a0a0a; color: white; }
+        .dark-card { background: #1a1a1a; border: 2px solid #ff0000; }
+        
+        /* Light Mode Colors */
+        .light-mode { background: #f0f0f0; color: #1a1a1a; }
+        .light-card { background: white; border: 2px solid #333; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
+        .page { display: none; width: 320px; animation: fadeIn 0.5s; margin-top: 20px; }
+        .active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #1a1a1a; display: flex; justify-content: space-around; padding: 15px 0; border-top: 2px solid #ff0000; }
+        .nav-item { color: #888; cursor: pointer; font-size: 12px; font-weight: bold; }
+        .active-nav { color: #ff0000; }
+
+        input, textarea { width: 100%; padding: 10px; margin: 10px 0; background: #222; border: 1px solid #333; color: white; border-radius: 8px; box-sizing: border-box; }
+        .btn-main { background: #ff0000; color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
-<body style="background: #0a0a0a; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; color: white;">
+<body class="dark-mode" id="mainBody">
 
-    <div style="background: linear-gradient(145deg, #1a1a1a, #000000); padding: 30px; border-radius: 25px; border: 2px solid #ff0000; box-shadow: 0 0 25px rgba(255, 0, 0, 0.3); text-align: center; width: 300px; margin-bottom: 20px;">
-        
-        <img src="https://cdn-icons-png.flaticon.com/512/805/805370.png" width="110" style="border-radius: 50%; border: 3px solid #ff0000; margin-bottom: 15px; box-shadow: 0 0 15px #ff0000;">
+    <button onclick="toggleMode()" style="margin-top: 20px; padding: 5px 15px; border-radius: 20px; border: none; cursor: pointer; font-weight: bold; background: #ff0000; color: white;">
+        ☀️ / 🌙 Change Mode
+    </button>
 
-        <h1 style="margin: 0; color: #ff0000; letter-spacing: 2px; text-transform: uppercase;">Venom Shot</h1>
-        <p style="color: #888; margin-top: 5px; font-size: 14px;">YouTube Content Creator & Gamer</p>
-
-        <div style="background: #222; padding: 10px; border-radius: 10px; margin: 20px 0; border-left: 5px solid #ff0000;">
-            <small style="color: #ff0000; font-weight: bold;">MY GAME ID</small>
-            <div id="gameID" style="font-size: 18px; font-weight: bold; letter-spacing: 1px; margin-bottom: 8px;">761339399</div>
-            <button onclick="copyID()" style="background: #ff0000; color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 12px; cursor: pointer; font-weight: bold;">Copy ID</button>
+    <div id="home" class="page active">
+        <div id="cardBox" class="dark-card" style="padding: 30px; border-radius: 25px; text-align: center;">
+            <img src="https://cdn-icons-png.flaticon.com/512/805/805370.png" width="100" style="border-radius: 50%; border: 2px solid #ff0000;">
+            <h2 id="userName" style="color: #ff0000; margin: 10px 0;">VENOM SHOT</h2>
+            <p style="font-size: 14px;">Gamer & Coder</p>
+            <button onclick="copyID()" style="background: #333; color: white; border: none; padding: 8px; border-radius: 5px; cursor: pointer;">Copy ID: 761339399</button>
+            <br><br>
+            <a href="https://youtube.com/@venomshot1" style="background: #ff0000; color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: bold; display: block;">Subscribe YouTube</a>
         </div>
-
-        <a href="https://youtube.com/@venomshot1?si=1ghpIdCYZPloEk-B" target="_blank" class="btn" style="background: #FF0000; color: white; padding: 12px; border-radius: 10px; margin-bottom: 10px;">
-            SUBSCRIBE YOUTUBE
-        </a>
     </div>
 
-    <div style="background: #151515; padding: 25px; border-radius: 20px; border: 1px solid #333; text-align: center; width: 300px;">
-        <h3 style="color: #ff0000; margin: 0; font-size: 14px;">CURRENT KILLS 💀</h3>
-        <div id="score" style="font-size: 50px; font-weight: bold; color: white;">0</div>
-        
-        <p style="color: #555; font-size: 12px; margin: 5px 0;">Best Record: <span id="highScore" style="color: gold;">0</span></p>
-
-        <div style="display: flex; justify-content: center; gap: 15px; margin-top: 10px;">
-            <button onclick="changeScore(1)" class="btn tracker-btn" style="flex: 1; padding: 12px; background: #ff0000; color: white; border-radius: 8px;">+ KILL</button>
-            <button onclick="changeScore(-1)" class="btn tracker-btn" style="padding: 12px; background: #333; color: white; border-radius: 8px;">-1</button>
+    <div id="contact" class="page">
+        <div id="formBox" class="dark-card" style="padding: 30px; border-radius: 25px;">
+            <h2 style="color: #ff0000; text-align: center;">SEND EMAIL</h2>
+            <input type="text" id="subject" placeholder="Topic">
+            <textarea id="msg" rows="4" placeholder="Message..."></textarea>
+            <button onclick="sendEmail()" class="btn-main">Send to Venom 📧</button>
         </div>
-        <button onclick="resetScore()" style="margin-top: 15px; background: transparent; color: #444; border: none; cursor: pointer; text-decoration: underline;">Reset All</button>
+    </div>
+
+    <div class="nav-bar">
+        <div class="nav-item active-nav" id="home-btn" onclick="showPage('home')">🏠 HOME</div>
+        <div class="nav-item" id="contact-btn" onclick="showPage('contact')">📧 EMAIL</div>
     </div>
 
     <script>
-        // Data Load Karo (LocalStorage se)
-        let count = 0;
-        let high = localStorage.getItem("highest") || 0;
-        
-        const scoreDisplay = document.getElementById("score");
-        const highDisplay = document.getElementById("highScore");
-        highDisplay.innerHTML = high;
+        function toggleMode() {
+            let body = document.getElementById('mainBody');
+            let card = document.getElementById('cardBox');
+            let form = document.getElementById('formBox');
 
-        function changeScore(points) {
-            count += points;
-            if (count < 0) count = 0;
-            scoreDisplay.innerHTML = count;
-
-            // Record check karo
-            if (count > high) {
-                high = count;
-                highDisplay.innerHTML = high;
-                localStorage.setItem("highest", high); // Save to phone memory
+            if (body.classList.contains('dark-mode')) {
+                // Switch to Light
+                body.classList.replace('dark-mode', 'light-mode');
+                card.classList.replace('dark-card', 'light-card');
+                form.classList.replace('dark-card', 'light-card');
+            } else {
+                // Switch to Dark
+                body.classList.replace('light-mode', 'dark-mode');
+                card.classList.replace('light-card', 'dark-card');
+                form.classList.replace('light-card', 'dark-card');
             }
         }
 
-        function resetScore() {
-            if(confirm("Score reset karein?")) {
-                count = 0;
-                scoreDisplay.innerHTML = count;
+        function showPage(pageId) {
+            document.getElementById('home').classList.remove('active');
+            document.getElementById('contact').classList.remove('active');
+            document.getElementById(pageId).classList.add('active');
+            
+            document.getElementById('home-btn').classList.remove('active-nav');
+            document.getElementById('contact-btn').classList.remove('active-nav');
+            document.getElementById(pageId + '-btn').classList.add('active-nav');
+        }
+
+        function sendEmail() {
+            let subject = document.getElementById('subject').value;
+            let msg = document.getElementById('msg').value;
+            let myEmail = "ab8858281@gmail.com"; 
+
+            if(subject == "" || msg == "") {
+                alert("Please fill all fields!");
+                return;
             }
+            window.location.href = "mailto:" + myEmail + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(msg);
         }
 
         function copyID() {
-            const idText = document.getElementById("gameID").innerText;
-            navigator.clipboard.writeText(idText);
-            alert("Game ID Copied: " + idText);
+            navigator.clipboard.writeText("5123445678");
+            alert("ID Copied!");
         }
     </script>
-
 </body>
-</html>
+        </html>
