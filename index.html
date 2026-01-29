@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Venom Shot | Pro Gamer</title>
     <style>
-        /* Glow and Animation Effects */
         .btn {
             transition: 0.3s;
             cursor: pointer;
@@ -13,15 +12,14 @@
             display: block;
             font-weight: bold;
             text-align: center;
+            border: none;
         }
         .btn:hover {
             transform: scale(1.05);
             box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
             filter: brightness(1.2);
         }
-        .tracker-btn:active {
-            transform: scale(0.9);
-        }
+        .tracker-btn:active { transform: scale(0.9); }
     </style>
 </head>
 <body style="background: #0a0a0a; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; color: white;">
@@ -35,57 +33,61 @@
 
         <div style="background: #222; padding: 10px; border-radius: 10px; margin: 20px 0; border-left: 5px solid #ff0000;">
             <small style="color: #ff0000; font-weight: bold;">MY GAME ID</small>
-            <div style="font-size: 18px; font-weight: bold; letter-spacing: 1px;">761339399</div>
+            <div id="gameID" style="font-size: 18px; font-weight: bold; letter-spacing: 1px; margin-bottom: 8px;">761339399</div>
+            <button onclick="copyID()" style="background: #ff0000; color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 12px; cursor: pointer; font-weight: bold;">Copy ID</button>
         </div>
 
         <a href="https://youtube.com/@venomshot1?si=1ghpIdCYZPloEk-B" target="_blank" class="btn" style="background: #FF0000; color: white; padding: 12px; border-radius: 10px; margin-bottom: 10px;">
             SUBSCRIBE YOUTUBE
         </a>
-
-        <a href="https://wa.me/yournumber" class="btn" style="background: #25D366; color: white; padding: 10px; border-radius: 8px; font-size: 14px;">
-            WhatsApp Me
-        </a>
     </div>
 
-    <div style="background: #151515; padding: 25px; border-radius: 20px; border: 1px solid #333; text-align: center; width: 300px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);">
-        <h3 style="color: #ff0000; margin-top: 0; font-size: 16px;">TODAY'S KILLS 💀</h3>
+    <div style="background: #151515; padding: 25px; border-radius: 20px; border: 1px solid #333; text-align: center; width: 300px;">
+        <h3 style="color: #ff0000; margin: 0; font-size: 14px;">CURRENT KILLS 💀</h3>
+        <div id="score" style="font-size: 50px; font-weight: bold; color: white;">0</div>
         
-        <div id="score" style="font-size: 60px; font-weight: bold; color: white; text-shadow: 0 0 10px rgba(255,255,255,0.2);">0</div>
-        
+        <p style="color: #555; font-size: 12px; margin: 5px 0;">Best Record: <span id="highScore" style="color: gold;">0</span></p>
+
         <div style="display: flex; justify-content: center; gap: 15px; margin-top: 10px;">
-            <button onclick="changeScore(1)" class="btn tracker-btn" style="flex: 1; padding: 12px; background: #ff0000; color: white; border: none; border-radius: 8px; font-weight: bold;">+ KILL</button>
-            <button onclick="changeScore(-1)" class="btn tracker-btn" style="padding: 12px; background: #333; color: white; border: none; border-radius: 8px;">-1</button>
+            <button onclick="changeScore(1)" class="btn tracker-btn" style="flex: 1; padding: 12px; background: #ff0000; color: white; border-radius: 8px;">+ KILL</button>
+            <button onclick="changeScore(-1)" class="btn tracker-btn" style="padding: 12px; background: #333; color: white; border-radius: 8px;">-1</button>
         </div>
-        
-        <button onclick="resetScore()" style="margin-top: 20px; background: transparent; color: #555; border: none; cursor: pointer; font-size: 12px; text-decoration: underline;">Reset Session</button>
+        <button onclick="resetScore()" style="margin-top: 15px; background: transparent; color: #444; border: none; cursor: pointer; text-decoration: underline;">Reset All</button>
     </div>
 
     <script>
+        // Data Load Karo (LocalStorage se)
         let count = 0;
-        let scoreDisplay = document.getElementById("score");
+        let high = localStorage.getItem("highest") || 0;
+        
+        const scoreDisplay = document.getElementById("score");
+        const highDisplay = document.getElementById("highScore");
+        highDisplay.innerHTML = high;
 
         function changeScore(points) {
-            count = count + points;
+            count += points;
             if (count < 0) count = 0;
             scoreDisplay.innerHTML = count;
-            
-            // Animation effect on score change
-            if (count >= 10) {
-                scoreDisplay.style.color = "#FFD700"; // Gold color for 10+ kills
-                scoreDisplay.style.textShadow = "0 0 20px #FFD700";
-            } else {
-                scoreDisplay.style.color = "white";
-                scoreDisplay.style.textShadow = "none";
+
+            // Record check karo
+            if (count > high) {
+                high = count;
+                highDisplay.innerHTML = high;
+                localStorage.setItem("highest", high); // Save to phone memory
             }
         }
 
         function resetScore() {
-            if(confirm("Kya aap score reset karna chahte hain?")) {
+            if(confirm("Score reset karein?")) {
                 count = 0;
                 scoreDisplay.innerHTML = count;
-                scoreDisplay.style.color = "white";
-                scoreDisplay.style.textShadow = "none";
             }
+        }
+
+        function copyID() {
+            const idText = document.getElementById("gameID").innerText;
+            navigator.clipboard.writeText(idText);
+            alert("Game ID Copied: " + idText);
         }
     </script>
 
