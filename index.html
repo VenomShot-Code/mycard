@@ -13,20 +13,16 @@
         #game-container { width: 90%; height: 320px; background: radial-gradient(circle, #222, #000); border: 3px solid #ff0000; position: relative; margin: 15px auto; overflow: hidden; border-radius: 20px; cursor: crosshair; }
         .target { width: 50px; height: 50px; background: url('https://cdn-icons-png.flaticon.com/512/805/805370.png'); background-size: cover; position: absolute; border-radius: 50%; border: 2px solid #ff0000; box-shadow: 0 0 15px red; }
         
-        #killFeed { position: absolute; top: 10px; left: 10px; color: #00ff00; font-size: 10px; text-align: left; font-weight: bold; pointer-events: none; z-index: 5; }
-        
-        .shake { animation: shake 0.2s; }
-        @keyframes shake { 0% { transform: translate(1px, 1px); } 50% { transform: translate(-2px, -1px); } 100% { transform: translate(0, 0); } }
-
         .nav-bar { position: fixed; bottom: 0; width: 100%; background: #151515; display: flex; justify-content: space-around; padding: 12px 0; border-top: 3px solid #ff0000; z-index: 100; }
         .nav-item { color: #666; cursor: pointer; font-size: 11px; font-weight: bold; text-align: center; }
         .active-nav { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
         
-        .btn-main { background: linear-gradient(to bottom, #ff4444, #cc0000); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: bold; cursor: pointer; margin: 8px; width: 85%; transition: 0.2s; text-decoration: none; display: inline-block; }
+        .btn-main { background: linear-gradient(to bottom, #ff4444, #cc0000); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: bold; cursor: pointer; margin: 8px; width: 85%; transition: 0.2s; text-decoration: none; display: inline-block; box-shadow: 0 4px 10px rgba(255,0,0,0.3); }
+        .btn-yt { background: #ff0000; border: 2px solid white; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); } }
+
         .dark-card { background: #151515; padding: 25px; border-radius: 30px; border: 1px solid #333; margin: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .tag { background: #000; color: #ff0000; padding: 5px 12px; border-radius: 20px; font-size: 11px; margin: 3px; display: inline-block; border: 1px solid #ff0000; font-weight: bold; }
-        
-        .music-btn { position: absolute; right: 10px; top: 10px; background: rgba(255,0,0,0.2); border: 1px solid #ff0000; color: white; padding: 5px 10px; border-radius: 50%; cursor: pointer; z-index: 10; }
     </style>
 </head>
 <body id="mainBody">
@@ -36,7 +32,7 @@
 
     <div id="startOverlay" style="position: fixed; top:0; left:0; width:100%; height:100%; background:black; z-index:999; display:flex; flex-direction:column; justify-content:center; align-items:center;">
         <h1 style="color: #ff0000; font-size: 40px; margin: 0; letter-spacing: 5px;">VENOMSHOT</h1>
-        <button onclick="enableAudio()" style="margin-top: 30px; padding: 15px 45px; background:#ff0000; color:white; border:none; border-radius:50px; font-size:18px; font-weight:bold; cursor:pointer; box-shadow: 0 0 25px #ff0000;">LOAD GAME 🎮</button>
+        <button onclick="enableAudio()" style="margin-top: 30px; padding: 15px 45px; background:#ff0000; color:white; border:none; border-radius:50px; font-size:18px; font-weight:bold; cursor:pointer;">START GAME 🎮</button>
     </div>
 
     <div id="home" class="page active">
@@ -46,35 +42,37 @@
             <div>
                 <span class="tag">#SNIPER</span><span class="tag">#RUSHER</span><span class="tag">#PRO</span>
             </div>
+            
             <div style="background: #000; padding: 12px; border-radius: 15px; border-left: 5px solid #ff0000; margin: 15px 0;">
                 <small style="color: #888;">PLAYER ID</small><br>
                 <b style="font-size: 20px;">7613393999</b>
             </div>
-            <div style="background: white; padding: 8px; display: inline-block; border-radius: 10px; margin-bottom: 10px;">
+
+            <a href="https://youtube.com/@venomshot1" target="_blank" class="btn-main btn-yt">WATCH ON YOUTUBE 📺</a>
+            
+            <button onclick="copyID()" class="btn-main" style="background: #333;">COPY UID 📋</button>
+            
+            <div style="background: white; padding: 8px; display: inline-block; border-radius: 10px; margin-top: 15px;">
                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://venomshot-code.github.io/mycard/" width="100">
+                <p style="color:black; font-size:9px; margin:0;">SCAN TO SHARE</p>
             </div>
-            <button onclick="copyID()" class="btn-main">COPY UID</button>
         </div>
     </div>
 
     <div id="shooter" class="page">
         <div id="rankBox" style="font-size: 22px; font-weight: 900; color: gold;">RANK: BRONZE 🥉</div>
         <div style="margin: 10px 0;">Kills: <b id="scoreVal" style="color: #ff0000;">0</b> | Best: <b id="bestVal" style="color: #00ff00;">0</b></div>
-        
         <div id="game-container" onclick="missShot()">
-            <button class="music-btn" id="mBtn" onclick="toggleMusic(event)">🔊</button>
-            <div id="killFeed"></div>
+            <div id="killFeed" style="position:absolute; top:10px; left:10px; color:#0f0; font-size:12px; font-weight:bold; pointer-events:none;"></div>
         </div>
-        
-        <div style="font-size: 18px;">TIME: <span id="timerVal" style="color: #ff0000; font-weight: bold;">20</span>s</div>
         <button id="startBtn" onclick="startGame()" class="btn-main">START MATCH</button>
     </div>
 
     <div id="contact" class="page">
         <div class="dark-card">
-            <h2 style="color: #ff0000;">CONTACT ME</h2>
+            <h2 style="color: #ff0000;">CONTACT</h2>
             <input type="text" id="subject" placeholder="Topic" style="width:90%; padding:12px; margin:10px 0; background:#000; border:1px solid #444; color:white; border-radius:10px;">
-            <textarea id="msg" rows="4" placeholder="Your message..." style="width:90%; padding:12px; background:#000; border:1px solid #444; color:white; border-radius:10px;"></textarea>
+            <textarea id="msg" rows="4" placeholder="Message..." style="width:90%; padding:12px; background:#000; border:1px solid #444; color:white; border-radius:10px;"></textarea>
             <button onclick="sendEmail()" class="btn-main">SEND EMAIL</button>
         </div>
     </div>
@@ -86,20 +84,12 @@
     </div>
 
     <script>
-        let score = 0, timeLeft = 20, gameActive = false, timer, musicOn = false;
+        let score = 0, timeLeft = 20, gameActive = false, timer;
         let bestScore = localStorage.getItem('vShotBest') || 0;
         document.getElementById('bestVal').innerText = bestScore;
 
         function enableAudio() { document.getElementById('startOverlay').style.display = 'none'; }
         
-        function toggleMusic(e) {
-            e.stopPropagation();
-            let m = document.getElementById('bgMusic');
-            let btn = document.getElementById('mBtn');
-            if(!musicOn) { m.play(); btn.innerText = "🔊"; musicOn = true; } 
-            else { m.pause(); btn.innerText = "🔈"; musicOn = false; }
-        }
-
         function showPage(pId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
@@ -111,12 +101,10 @@
             if(gameActive) return;
             score = 0; timeLeft = 20; gameActive = true;
             document.getElementById('scoreVal').innerText = score;
-            document.getElementById('killFeed').innerHTML = '';
             document.getElementById('startBtn').style.visibility = 'hidden';
             spawnTarget();
             timer = setInterval(() => {
                 timeLeft--;
-                document.getElementById('timerVal').innerText = timeLeft;
                 if(timeLeft <= 0) endGame();
             }, 1000);
         }
@@ -136,12 +124,9 @@
         function hitTarget() {
             score++;
             document.getElementById('scoreVal').innerText = score;
-            const feed = document.getElementById('killFeed');
-            const msgs = ["ONE TAP!", "HEADSHOT!", "WIPED!", "GODLIKE!", "ULTRA!"];
-            feed.innerHTML = `<div style="color:#0f0">> ${msgs[Math.floor(Math.random()*msgs.length)]}</div>` + feed.innerHTML;
-            document.getElementById('game-container').classList.add('shake');
-            setTimeout(() => document.getElementById('game-container').classList.remove('shake'), 200);
-            playGun(); spawnTarget(); updateRank();
+            let s = document.getElementById('shootSound'); s.currentTime = 0; s.play();
+            spawnTarget();
+            updateRank();
         }
 
         function updateRank() {
@@ -153,8 +138,7 @@
             document.getElementById('rankBox').style.color = c;
         }
 
-        function playGun() { let s = document.getElementById('shootSound'); s.currentTime = 0; s.play(); }
-        function missShot() { if(gameActive) playGun(); }
+        function missShot() { if(gameActive) { let s = document.getElementById('shootSound'); s.currentTime = 0; s.play(); } }
 
         function endGame() {
             gameActive = false; clearInterval(timer);
@@ -163,8 +147,8 @@
             if(score > bestScore) {
                 bestScore = score; localStorage.setItem('vShotBest', bestScore);
                 document.getElementById('bestVal').innerText = bestScore;
-                alert("NEW WORLD RECORD! 🏆 Score: " + score);
-            } else { alert("Match Ended. Kills: " + score); }
+            }
+            alert("Game Over! Score: " + score);
         }
 
         function copyID() { navigator.clipboard.writeText("7613393999"); alert("UID Copied!"); }
@@ -173,4 +157,4 @@
         }
     </script>
 </body>
-                </html>
+            </html>
