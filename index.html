@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VENOMSHOT | Official Hub</title>
+    <title>VENOMSHOT | Pro Gamer Hub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { margin: 0; padding-bottom: 80px; display: flex; flex-direction: column; align-items: center; font-family: 'Arial', sans-serif; background: #0a0a0a; color: white; overflow-x: hidden; }
@@ -41,7 +41,7 @@
             </div>
             <h1 style="color: #ff0000; margin: 15px 0;">VENOMSHOT</h1>
             
-            <a href="_VENOMSHOT1_19492199.apk" download class="btn-main btn-download">
+            <a href="https://www.mediafire.com/file/9ftlvf4ufxxmqx2/_VENOMSHOT1_19492199.apk/file" target="_blank" class="btn-main btn-download">
                 <i class="fas fa-download"></i> DOWNLOAD APK NOW
             </a>
             
@@ -71,7 +71,6 @@
             <input type="text" id="subject" placeholder="Topic">
             <textarea id="msg" rows="5" placeholder="Your Message..."></textarea>
             <button onclick="sendEmail()" class="btn-main"><i class="fas fa-envelope"></i> SEND EMAIL</button>
-            <p style="font-size: 11px; color: #555;">ab8858281@gmail.com</p>
         </div>
     </div>
 
@@ -83,23 +82,19 @@
 
     <script>
         let score = 0, gameActive = false;
-
         function startApp() { document.getElementById('startOverlay').style.display = 'none'; }
-        
         function showPage(pId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
             document.getElementById(pId).classList.add('active');
             document.getElementById(pId + '-btn').classList.add('active-nav');
         }
-
         function startGame() {
             if(gameActive) return;
             score = 0; gameActive = true;
             document.getElementById('startBtn').style.visibility = 'hidden';
             spawnTarget();
         }
-
         function spawnTarget() {
             if(!gameActive) return;
             const gc = document.getElementById('game-container');
@@ -111,17 +106,15 @@
             t.onclick = (e) => { e.stopPropagation(); hitTarget(); };
             gc.appendChild(t);
         }
-
         function hitTarget() {
             score++;
-            let s = document.getElementById('shootSound'); s.currentTime = 0; s.play();
+            document.getElementById('shootSound').currentTime = 0;
+            document.getElementById('shootSound').play();
             spawnTarget();
             if(score > 10) document.getElementById('rankBox').innerText = "RANK: GOLD";
         }
-
         function missShot() { if(gameActive) { let s = document.getElementById('shootSound'); s.currentTime = 0; s.play(); } }
         function copyID() { navigator.clipboard.writeText("7613393999"); alert("UID Copied!"); }
-        
         function sendEmail() {
             const sub = document.getElementById('subject').value;
             const msg = document.getElementById('msg').value;
