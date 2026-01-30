@@ -3,66 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VENOMSHOT | Official App</title>
-    
+    <title>VENOMSHOT | Pro Gamer App</title>
     <style>
         body { margin: 0; padding-bottom: 80px; display: flex; flex-direction: column; align-items: center; font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: white; overflow-x: hidden; }
         .page { display: none; width: 100%; max-width: 400px; animation: fadeIn 0.4s; margin-top: 20px; text-align: center; }
         .active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         
-        #game-container { width: 90%; height: 320px; background: radial-gradient(circle, #222, #000); border: 3px solid #ff0000; position: relative; margin: 15px auto; overflow: hidden; border-radius: 20px; }
-        .target { width: 50px; height: 50px; background: url('https://cdn-icons-png.flaticon.com/512/805/805370.png'); background-size: cover; position: absolute; border-radius: 50%; border: 2px solid #ff0000; box-shadow: 0 0 15px red; }
+        #game-container { width: 90%; height: 320px; background: radial-gradient(circle, #222, #000); border: 3px solid #ff0000; position: relative; margin: 15px auto; overflow: hidden; border-radius: 20px; box-shadow: 0 0 20px rgba(255,0,0,0.3); }
+        .target { width: 50px; height: 50px; background: url('https://cdn-icons-png.flaticon.com/512/805/805370.png'); background-size: cover; position: absolute; border-radius: 50%; border: 2px solid #ff0000; filter: drop-shadow(0 0 10px red); }
         
-        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #151515; display: flex; justify-content: space-around; padding: 12px 0; border-top: 3px solid #ff0000; z-index: 100; }
-        .nav-item { color: #666; cursor: pointer; font-size: 11px; font-weight: bold; text-align: center; }
-        .active-nav { color: #ff0000; }
+        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #111; display: flex; justify-content: space-around; padding: 12px 0; border-top: 2px solid #ff0000; z-index: 100; }
+        .nav-item { color: #555; cursor: pointer; font-size: 10px; font-weight: bold; text-align: center; text-transform: uppercase; }
+        .active-nav { color: #ff0000; text-shadow: 0 0 10px red; }
         
-        .btn-main { background: linear-gradient(to bottom, #ff4444, #cc0000); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: bold; cursor: pointer; margin: 8px; width: 85%; transition: 0.2s; text-decoration: none; display: inline-block; }
-        .btn-install { background: #ffcc00 !important; color: black !important; font-size: 14px; border: 2px solid white; }
+        .btn-main { background: linear-gradient(to bottom, #ff4444, #cc0000); color: white; border: none; padding: 15px; border-radius: 15px; font-weight: bold; cursor: pointer; margin: 10px; width: 85%; transition: 0.2s; text-decoration: none; display: inline-block; font-size: 14px; }
+        .btn-download { background: #ffcc00 !important; color: #000 !important; border: 2px solid #fff; box-shadow: 0 5px 15px rgba(255,204,0,0.4); }
+        
         .dark-card { background: #151515; padding: 25px; border-radius: 30px; border: 1px solid #333; margin: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        
-        input, textarea { width: 90%; padding: 12px; margin: 10px 0; background: #000; border: 1px solid #444; color: white; border-radius: 10px; }
+        input, textarea { width: 90%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #444; color: white; border-radius: 10px; font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <audio id="shootSound"><source src="https://cdn.pixabay.com/audio/2022/03/10/audio_73d9396f4c.mp3" type="audio/mp3"></audio>
-
-    <div id="startOverlay" style="position: fixed; top:0; left:0; width:100%; height:100%; background:black; z-index:999; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-        <h1 style="color: #ff0000; font-size: 40px; letter-spacing: 5px;">VENOMSHOT</h1>
-        <button onclick="enableAudio()" style="margin-top: 30px; padding: 15px 45px; background:#ff0000; color:white; border:none; border-radius:50px; font-size:18px; font-weight:bold; cursor:pointer;">ACTIVATE APP 📱</button>
+    <div id="startOverlay" style="position: fixed; top:0; left:0; width:100%; height:100%; background:black; z-index:999; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+        <h1 style="color: #ff0000; font-size: 35px; margin: 0; letter-spacing: 3px;">VENOMSHOT</h1>
+        <p style="color: #666; font-size: 12px;">ULTRA GAMING APP</p>
+        <button onclick="startApp()" style="margin-top: 30px; padding: 18px 50px; background:#ff0000; color:white; border:none; border-radius:50px; font-size:16px; font-weight:bold; cursor:pointer; box-shadow: 0 0 30px #ff0000;">OPEN ARENA 🎮</button>
     </div>
+
+    <audio id="shootSound"><source src="https://cdn.pixabay.com/audio/2022/03/10/audio_73d9396f4c.mp3" type="audio/mp3"></audio>
 
     <div id="home" class="page active">
         <div class="dark-card">
-            <img src="https://cdn-icons-png.flaticon.com/512/805/805370.png" width="90" style="border: 3px solid #ff0000; border-radius: 50%;">
-            <h1 style="color: #ff0000; margin: 10px 0;">VENOMSHOT</h1>
+            <img src="https://cdn-icons-png.flaticon.com/512/805/805370.png" width="80" style="border: 3px solid #ff0000; border-radius: 50%; padding: 5px;">
+            <h1 style="color: #ff0000; margin: 10px 0; font-size: 24px;">VENOMSHOT</h1>
             
-            <button id="installBtn" onclick="installApp()" class="btn-main btn-install">📥 INSTALL AS APP</button>
+            <button onclick="downloadAppInfo()" class="btn-main btn-download">📲 DOWNLOAD APK APP</button>
             
-            <div style="background: #000; padding: 12px; border-radius: 15px; border-left: 5px solid #ff0000; margin: 15px 0;">
-                <small style="color: #888;">UID: 7613393999</small>
+            <div style="background: #000; padding: 15px; border-radius: 15px; border-left: 5px solid #ff0000; margin: 15px 0;">
+                <small style="color: #888; font-size: 10px;">GLOBAL PLAYER UID</small><br>
+                <b style="font-size: 22px; color: #fff;">7613393999</b>
             </div>
             
-            <a href="https://youtube.com/@venomshot1" target="_blank" class="btn-main" style="background:#ff0000;">YOUTUBE 📺</a>
-            <button onclick="copyID()" class="btn-main" style="background: #333;">COPY UID 📋</button>
+            <a href="https://youtube.com/@venomshot1" target="_blank" class="btn-main" style="background: #ff0000;">YOUTUBE CHANNEL 📺</a>
+            <button onclick="copyID()" class="btn-main" style="background: #222;">COPY UID 📋</button>
         </div>
     </div>
 
     <div id="shooter" class="page">
-        <div id="rankBox" style="font-size: 22px; font-weight: 900; color: gold;">RANK: BRONZE 🥉</div>
+        <div id="rankBox" style="font-size: 20px; font-weight: 900; color: gold; margin-bottom: 10px;">RANK: BRONZE 🥉</div>
+        <div style="margin-bottom: 10px; font-size: 14px;">Kills: <b id="scoreVal" style="color: #ff0000;">0</b> | Best: <b id="bestVal" style="color: #00ff00;">0</b></div>
         <div id="game-container" onclick="missShot()"></div>
         <button id="startBtn" onclick="startGame()" class="btn-main">START MATCH 🔫</button>
     </div>
 
     <div id="contact" class="page">
         <div class="dark-card">
-            <h2 style="color: #ff0000;">CONTACT ME</h2>
-            <input type="text" id="subject" placeholder="Subject">
-            <textarea id="msg" rows="4" placeholder="Your message..."></textarea>
+            <h2 style="color: #ff0000; margin-top: 0;">SEND MESSAGE</h2>
+            <input type="text" id="subject" placeholder="Subject / Topic">
+            <textarea id="msg" rows="5" placeholder="Write your message here..."></textarea>
             <button onclick="sendEmail()" class="btn-main">SEND EMAIL 📧</button>
-            <p style="font-size: 12px; color: #888;">ab8858281@gmail.com</p>
+            <p style="font-size: 11px; color: #666; margin-top: 10px;">Direct: ab8858281@gmail.com</p>
         </div>
     </div>
 
@@ -73,9 +75,11 @@
     </div>
 
     <script>
-        let score = 0, gameActive = false, deferredPrompt;
+        let score = 0, gameActive = false;
+        let bestScore = localStorage.getItem('vShotBest') || 0;
+        document.getElementById('bestVal').innerText = bestScore;
 
-        function enableAudio() { document.getElementById('startOverlay').style.display = 'none'; }
+        function startApp() { document.getElementById('startOverlay').style.display = 'none'; }
         
         function showPage(pId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -84,25 +88,14 @@
             document.getElementById(pId + '-btn').classList.add('active-nav');
         }
 
-        // Install App Function
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-        });
-
-        async function installApp() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                deferredPrompt = null;
-            } else {
-                alert("Mobile par install karne ke liye: Chrome ke top-right 3-dots par click karein aur 'Install App' ya 'Add to Home screen' dabayein! 📱");
-            }
+        function downloadAppInfo() {
+            alert("App Download karne ke liye:\n1. Chrome Menu (3-dots) dabayein.\n2. 'Install App' ya 'Add to Home Screen' select karein.\n\nYa phir 'WebIntoApp.com' par ja kar iska APK banayein!");
         }
 
         function startGame() {
             if(gameActive) return;
             score = 0; gameActive = true;
+            document.getElementById('scoreVal').innerText = score;
             document.getElementById('startBtn').style.visibility = 'hidden';
             spawnTarget();
         }
@@ -121,8 +114,8 @@
 
         function hitTarget() {
             score++;
-            document.getElementById('shootSound').currentTime = 0;
-            document.getElementById('shootSound').play();
+            document.getElementById('scoreVal').innerText = score;
+            let s = document.getElementById('shootSound'); s.currentTime = 0; s.play();
             spawnTarget();
             updateRank();
         }
@@ -138,12 +131,13 @@
 
         function missShot() { if(gameActive) { let s = document.getElementById('shootSound'); s.currentTime = 0; s.play(); } }
         function copyID() { navigator.clipboard.writeText("7613393999"); alert("UID Copied!"); }
-        
+
         function sendEmail() {
             const sub = document.getElementById('subject').value;
             const msg = document.getElementById('msg').value;
+            if(!sub || !msg) return alert("Please fill all fields!");
             window.location.href = `mailto:ab8858281@gmail.com?subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(msg)}`;
         }
     </script>
 </body>
-    </html>
+            </html>
