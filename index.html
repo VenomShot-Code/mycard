@@ -46,7 +46,7 @@
             </a>
             
             <div style="background: #000; padding: 15px; border-radius: 15px; border-left: 5px solid #ff0000; margin: 15px 0;">
-                <small style="color: #888;">VENOMSHOT UID</small><br>
+                <small style="color: #888;">PLAYER UID</small><br>
                 <b style="font-size: 22px;">7613393999</b>
             </div>
             
@@ -60,4 +60,73 @@
     </div>
 
     <div id="shooter" class="page">
-        <div id="rankBox" style="font-size: 20px; font-weight: bold
+        <div id="rankBox" style="font-size: 20px; font-weight: bold; color: gold; margin-bottom: 10px;">RANK: BRONZE</div>
+        <div id="game-container" onclick="missShot()"></div>
+        <button id="startBtn" onclick="startGame()" class="btn-main"><i class="fas fa-crosshairs"></i> START MATCH</button>
+    </div>
+
+    <div id="contact" class="page">
+        <div class="dark-card">
+            <h2 style="color: #ff0000;">CONTACT ME</h2>
+            <input type="text" id="subject" placeholder="Topic">
+            <textarea id="msg" rows="5" placeholder="Your Message..."></textarea>
+            <button onclick="sendEmail()" class="btn-main"><i class="fas fa-envelope"></i> SEND EMAIL</button>
+            <p style="font-size: 11px; color: #555;">ab8858281@gmail.com</p>
+        </div>
+    </div>
+
+    <div class="nav-bar">
+        <div class="nav-item active-nav" id="home-btn" onclick="showPage('home')"><i class="fas fa-home"></i><br>HOME</div>
+        <div class="nav-item" id="shooter-btn" onclick="showPage('shooter')"><i class="fas fa-gun"></i><br>ARENA</div>
+        <div class="nav-item" id="contact-btn" onclick="showPage('contact')"><i class="fas fa-envelope"></i><br>EMAIL</div>
+    </div>
+
+    <script>
+        let score = 0, gameActive = false;
+
+        function startApp() { document.getElementById('startOverlay').style.display = 'none'; }
+        
+        function showPage(pId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
+            document.getElementById(pId).classList.add('active');
+            document.getElementById(pId + '-btn').classList.add('active-nav');
+        }
+
+        function startGame() {
+            if(gameActive) return;
+            score = 0; gameActive = true;
+            document.getElementById('startBtn').style.visibility = 'hidden';
+            spawnTarget();
+        }
+
+        function spawnTarget() {
+            if(!gameActive) return;
+            const gc = document.getElementById('game-container');
+            document.querySelector('.target')?.remove();
+            const t = document.createElement('div');
+            t.className = 'target';
+            t.style.left = Math.random() * (gc.offsetWidth - 60) + 'px';
+            t.style.top = Math.random() * (gc.offsetHeight - 60) + 'px';
+            t.onclick = (e) => { e.stopPropagation(); hitTarget(); };
+            gc.appendChild(t);
+        }
+
+        function hitTarget() {
+            score++;
+            let s = document.getElementById('shootSound'); s.currentTime = 0; s.play();
+            spawnTarget();
+            if(score > 10) document.getElementById('rankBox').innerText = "RANK: GOLD";
+        }
+
+        function missShot() { if(gameActive) { let s = document.getElementById('shootSound'); s.currentTime = 0; s.play(); } }
+        function copyID() { navigator.clipboard.writeText("7613393999"); alert("UID Copied!"); }
+        
+        function sendEmail() {
+            const sub = document.getElementById('subject').value;
+            const msg = document.getElementById('msg').value;
+            window.location.href = `mailto:ab8858281@gmail.com?subject=${sub}&body=${msg}`;
+        }
+    </script>
+</body>
+                </html>
