@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VENOMSHOT | Pro Gamer</title>
+    <title>VENOMSHOT | Official App</title>
+    
+    <meta name="theme-color" content="#ff0000">
+    <link rel="manifest" id="manifest-link">
+
     <style>
         body { transition: 0.5s; margin: 0; padding-bottom: 80px; display: flex; flex-direction: column; align-items: center; font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: white; overflow-x: hidden; }
         .page { display: none; width: 100%; max-width: 400px; animation: fadeIn 0.4s; margin-top: 20px; text-align: center; }
@@ -17,73 +21,74 @@
         .nav-item { color: #666; cursor: pointer; font-size: 11px; font-weight: bold; text-align: center; }
         .active-nav { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
         
-        .btn-main { background: linear-gradient(to bottom, #ff4444, #cc0000); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: bold; cursor: pointer; margin: 8px; width: 85%; transition: 0.2s; text-decoration: none; display: inline-block; box-shadow: 0 4px 10px rgba(255,0,0,0.3); }
-        .btn-yt { background: #ff0000; border: 2px solid white; }
+        .btn-main { background: linear-gradient(to bottom, #ff4444, #cc0000); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: bold; cursor: pointer; margin: 8px; width: 85%; transition: 0.2s; text-decoration: none; display: inline-block; }
+        .btn-install { background: #ffcc00; color: black; display: none; } /* Hidden by default */
         .dark-card { background: #151515; padding: 25px; border-radius: 30px; border: 1px solid #333; margin: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .tag { background: #000; color: #ff0000; padding: 5px 12px; border-radius: 20px; font-size: 11px; margin: 3px; display: inline-block; border: 1px solid #ff0000; font-weight: bold; }
     </style>
 </head>
 <body id="mainBody">
 
-    <audio id="shootSound" preload="auto">
-        <source src="https://cdn.pixabay.com/audio/2022/03/10/audio_73d9396f4c.mp3" type="audio/mp3">
-    </audio>
-    <audio id="bgMusic" loop preload="auto">
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
-    </audio>
+    <audio id="shootSound"><source src="https://cdn.pixabay.com/audio/2022/03/10/audio_73d9396f4c.mp3" type="audio/mp3"></audio>
 
     <div id="startOverlay" style="position: fixed; top:0; left:0; width:100%; height:100%; background:black; z-index:999; display:flex; flex-direction:column; justify-content:center; align-items:center;">
         <h1 style="color: #ff0000; font-size: 40px; margin: 0; letter-spacing: 5px;">VENOMSHOT</h1>
-        <button onclick="enableAudio()" style="margin-top: 30px; padding: 15px 45px; background:#ff0000; color:white; border:none; border-radius:50px; font-size:18px; font-weight:bold; cursor:pointer;">ACTIVATE SOUND 🔊</button>
+        <button onclick="enableAudio()" style="margin-top: 30px; padding: 15px 45px; background:#ff0000; color:white; border:none; border-radius:50px; font-size:18px; font-weight:bold; cursor:pointer;">ACTIVATE APP 📱</button>
     </div>
 
     <div id="home" class="page active">
         <div class="dark-card">
             <img src="https://cdn-icons-png.flaticon.com/512/805/805370.png" width="90" style="border: 3px solid #ff0000; border-radius: 50%; padding: 5px;">
             <h1 style="color: #ff0000; margin: 10px 0;">VENOMSHOT</h1>
-            <div><span class="tag">#SNIPER</span><span class="tag">#RUSHER</span><span class="tag">#PRO</span></div>
+            
+            <button id="installBtn" class="btn-main btn-install">📥 INSTALL REAL APP</button>
+            
             <div style="background: #000; padding: 12px; border-radius: 15px; border-left: 5px solid #ff0000; margin: 15px 0;">
                 <small style="color: #888;">PLAYER ID</small><br><b style="font-size: 20px;">7613393999</b>
             </div>
-            <a href="https://youtube.com/@venomshot1" target="_blank" class="btn-main btn-yt">WATCH ON YOUTUBE 📺</a>
+            
+            <a href="https://youtube.com/@venomshot1" target="_blank" class="btn-main" style="background:#ff0000;">YOUTUBE CHANNEL 📺</a>
             <button onclick="copyID()" class="btn-main" style="background: #333;">COPY UID 📋</button>
         </div>
     </div>
 
     <div id="shooter" class="page">
         <div id="rankBox" style="font-size: 22px; font-weight: 900; color: gold;">RANK: BRONZE 🥉</div>
-        <div style="margin: 10px 0;">Kills: <b id="scoreVal" style="color: #ff0000;">0</b> | Best: <b id="bestVal" style="color: #00ff00;">0</b></div>
-        <div id="game-container" onclick="missShot()">
-            <div id="killFeed" style="position:absolute; top:10px; left:10px; color:#0f0; font-size:12px; font-weight:bold; pointer-events:none;"></div>
-        </div>
+        <div id="game-container" onclick="missShot()"></div>
         <button id="startBtn" onclick="startGame()" class="btn-main">START MATCH 🔫</button>
-    </div>
-
-    <div id="contact" class="page">
-        <div class="dark-card">
-            <h2 style="color: #ff0000;">CONTACT</h2>
-            <button onclick="sendEmail()" class="btn-main">SEND EMAIL 📧</button>
-        </div>
     </div>
 
     <div class="nav-bar">
         <div class="nav-item active-nav" id="home-btn" onclick="showPage('home')">🏠<br>HOME</div>
         <div class="nav-item" id="shooter-btn" onclick="showPage('shooter')">🔫<br>ARENA</div>
-        <div class="nav-item" id="contact-btn" onclick="showPage('contact')">📧<br>MAIL</div>
     </div>
 
     <script>
-        let score = 0, timeLeft = 20, gameActive = false, timer;
-        let shootSound = document.getElementById('shootSound');
-        let bgMusic = document.getElementById('bgMusic');
+        // --- PWA INSTALL LOGIC ---
+        let deferredPrompt;
+        const installBtn = document.getElementById('installBtn');
 
-        function enableAudio() {
-            document.getElementById('startOverlay').style.display = 'none';
-            // Play and immediately pause to "unlock" audio for mobile browsers
-            bgMusic.play();
-            bgMusic.volume = 0.3;
-        }
-        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'inline-block'; // Show button when app is ready to install
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                }
+                deferredPrompt = null;
+                installBtn.style.display = 'none';
+            }
+        });
+
+        // --- GAME LOGIC ---
+        let score = 0, gameActive = false, timer;
+
+        function enableAudio() { document.getElementById('startOverlay').style.display = 'none'; }
         function showPage(pId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
@@ -93,14 +98,9 @@
 
         function startGame() {
             if(gameActive) return;
-            score = 0; timeLeft = 20; gameActive = true;
-            document.getElementById('scoreVal').innerText = score;
+            score = 0; gameActive = true;
             document.getElementById('startBtn').style.visibility = 'hidden';
             spawnTarget();
-            timer = setInterval(() => {
-                timeLeft--;
-                if(timeLeft <= 0) endGame();
-            }, 1000);
         }
 
         function spawnTarget() {
@@ -117,9 +117,7 @@
 
         function hitTarget() {
             score++;
-            document.getElementById('scoreVal').innerText = score;
-            shootSound.currentTime = 0;
-            shootSound.play();
+            let s = document.getElementById('shootSound'); s.currentTime = 0; s.play();
             spawnTarget();
             updateRank();
         }
@@ -133,23 +131,28 @@
             document.getElementById('rankBox').style.color = c;
         }
 
-        function missShot() {
-            if(gameActive) {
-                shootSound.currentTime = 0;
-                shootSound.play();
-            }
-        }
-
-        function endGame() {
-            gameActive = false;
-            clearInterval(timer);
-            document.querySelector('.target')?.remove();
-            document.getElementById('startBtn').style.visibility = 'visible';
-            alert("Match Finished! Kills: " + score);
-        }
-
+        function missShot() { if(gameActive) { let s = document.getElementById('shootSound'); s.currentTime = 0; s.play(); } }
         function copyID() { navigator.clipboard.writeText("7613393999"); alert("UID Copied!"); }
-        function sendEmail() { window.location.href = `mailto:ab8858281@gmail.com`; }
+
+        // Create a Dynamic Manifest for the Browser
+        const myManifest = {
+            "name": "VENOMSHOT PRO GAMER",
+            "short_name": "VENOMSHOT",
+            "start_url": ".",
+            "display": "standalone",
+            "background_color": "#0a0a0a",
+            "theme_color": "#ff0000",
+            "icons": [{
+                "src": "https://cdn-icons-png.flaticon.com/512/805/805370.png",
+                "sizes": "512x512",
+                "type": "image/png"
+            }]
+        };
+        const stringManifest = JSON.stringify(myManifest);
+        const blob = new Blob([stringManifest], {type: 'application/json'});
+        const manifestURL = URL.createObjectURL(blob);
+        document.querySelector('#manifest-link').setAttribute('href', manifestURL);
+
     </script>
 </body>
-    </html>
+        </html>
