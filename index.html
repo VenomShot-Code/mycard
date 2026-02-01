@@ -3,137 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VENOMSHOT | Official Portfolio</title>
+    <title>VENOMSHOT | Survival Game</title>
     <style>
-        body { margin: 0; background: #0a0a0a; color: white; font-family: 'Arial', sans-serif; overflow: hidden; text-align: center; }
+        body { margin: 0; background: #050505; color: white; font-family: 'Arial', sans-serif; overflow-x: hidden; display: flex; flex-direction: column; height: 100vh; }
         
-        /* Premium RGB Card */
+        /* 1. Game Section (Top) */
+        #gameContainer { position: relative; width: 100%; height: 60vh; background: #000; border-bottom: 3px solid #ff0000; }
+        canvas { width: 100%; height: 100%; touch-action: none; }
+        .stats { position: absolute; top: 10px; left: 10px; font-weight: bold; text-shadow: 2px 2px #000; }
+
+        /* 2. Info Card Section (Bottom) */
         .venom-card {
-            background: #111; border: 2px solid #ff0000; border-radius: 15px;
-            padding: 20px; margin: 15px auto; width: 85%; max-width: 380px;
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.6);
-            animation: borderGlow 1.5s infinite alternate;
+            flex: 1; background: #111; padding: 20px; text-align: center;
+            border-radius: 20px 20px 0 0; box-shadow: 0 -5px 20px rgba(255,0,0,0.4);
         }
-
-        @keyframes borderGlow {
-            from { box-shadow: 0 0 10px #ff0000; border-color: #ff0000; }
-            to { box-shadow: 0 0 25px #ff4444; border-color: #ff4444; }
-        }
-
-        .name { font-size: 32px; font-weight: 900; color: #ff0000; text-shadow: 2px 2px #000; margin: 0; }
-        .uid-tag { color: #ffcc00; font-weight: bold; font-size: 16px; margin: 10px 0; display: block; }
+        .name { font-size: 30px; font-weight: 900; color: #ff0000; margin: 0; text-transform: uppercase; }
+        .uid { color: #ffcc00; font-size: 18px; margin: 10px 0; display: block; }
+        .links { margin: 15px 0; }
+        .links a { color: #00d2ff; text-decoration: none; font-size: 14px; display: block; margin: 5px 0; }
         
-        /* Email & YT Links */
-        .contact-link { color: #00d2ff; text-decoration: none; font-size: 14px; display: block; margin: 5px 0; font-weight: bold; }
-        .yt-btn { 
-            display: inline-block; background: #ff0000; color: white; 
-            padding: 10px 20px; border-radius: 5px; text-decoration: none; 
-            font-weight: bold; margin-top: 10px; font-size: 14px;
-        }
-
-        #gameCanvas { background: #000; border-top: 2px solid #333; width: 100%; height: 55vh; touch-action: none; }
-        .stats { position: absolute; bottom: 20px; left: 20px; text-align: left; pointer-events: none; font-weight: bold; }
+        /* Buttons */
+        .btn-group { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
+        .btn { padding: 10px 15px; border-radius: 8px; font-weight: bold; text-decoration: none; font-size: 14px; cursor: pointer; border: none; }
+        .yt-btn { background: #ff0000; color: white; }
+        .dl-btn { background: #00ff88; color: #000; }
     </style>
 </head>
 <body>
 
-    <div class="venom-card">
-        <h1 class="name">VENOMSHOT</h1>
-        <span class="uid-tag">🔥 FF UID: 761339399</span>
-        
-        <a href="mailto:ab8858281@gmail.com" class="contact-link">📧 ab8858281@gmail.com</a>
-        
-        <a href="https://www.youtube.com/@VenomShot1" target="_blank" class="yt-btn">SUBSCRIBE YOUTUBE</a>
+    <div id="gameContainer">
+        <div class="stats">
+            SCORE: <span id="score">0</span> | HEALTH: <span id="health">100</span>%
+        </div>
+        <canvas id="gameCanvas"></canvas>
     </div>
 
-    <div class="stats">
-        SCORE: <span id="score">0</span><br>
-        HEALTH: <span id="health">100</span>%
+    <div class="venom-card">
+        <h1 class="name">VENOMSHOT</h1>
+        <span class="uid">🎮 FF UID: 761339399</span>
+        
+        <div class="links">
+            <a href="mailto:ab8858281@gmail.com">📧 Email: ab8858281@gmail.com</a>
+        </div>
+
+        <div class="btn-group">
+            <a href="https://www.youtube.com/@VenomShot1" target="_blank" class="btn yt-btn">YOUTUBE</a>
+            <button class="btn dl-btn" onclick="downloadGame()">DOWNLOAD GAME</button>
+        </div>
     </div>
-    <canvas id="gameCanvas"></canvas>
 
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
         canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight * 0.55;
+        canvas.height = window.innerHeight * 0.6;
 
-        let player = { x: canvas.width/2, y: canvas.height/2, size: 14, color: "#00ff88", health: 100, score: 0 };
+        let player = { x: canvas.width/2, y: canvas.height/2, size: 15, color: "#00ff88", health: 100, score: 0 };
         let zombies = [];
         let touch = { x: player.x, y: player.y };
 
         function spawnZombie() {
-            if (zombies.length < 6 && player.health > 0) {
-                zombies.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() < 0.5 ? -20 : canvas.height + 20,
-                    size: 16,
-                    speed: 1.2 + (player.score / 500) // Score ke saath speed barhegi
-                });
+            if (zombies.length < 5 && player.health > 0) {
+                zombies.push({ x: Math.random() * canvas.width, y: Math.random() < 0.5 ? -20 : canvas.height + 20, size: 18, speed: 1.5 });
             }
         }
-        setInterval(spawnZombie, 1500);
+        setInterval(spawnZombie, 2000);
 
-        canvas.addEventListener("touchstart", (e) => handleTouch(e));
-        canvas.addEventListener("touchmove", (e) => { e.preventDefault(); handleTouch(e); });
-
-        function handleTouch(e) {
-            touch.x = e.touches[0].clientX;
-            touch.y = e.touches[0].clientY - canvas.offsetTop;
-        }
+        canvas.addEventListener("touchstart", (e) => { touch.x = e.touches[0].clientX; touch.y = e.touches[0].clientY; });
+        canvas.addEventListener("touchmove", (e) => { e.preventDefault(); touch.x = e.touches[0].clientX; touch.y = e.touches[0].clientY; });
 
         function update() {
             if (player.health <= 0) return;
-
-            // Player follow touch
             player.x += (touch.x - player.x) * 0.1;
             player.y += (touch.y - player.y) * 0.1;
 
-            zombies.forEach((z, i) => {
-                let dx = player.x - z.x;
-                let dy = player.y - z.y;
-                let angle = Math.atan2(dy, dx);
+            zombies.forEach((z) => {
+                let angle = Math.atan2(player.y - z.y, player.x - z.x);
                 z.x += Math.cos(angle) * z.speed;
                 z.y += Math.sin(angle) * z.speed;
-
-                // Collision Detection
-                let dist = Math.sqrt(dx*dx + dy*dy);
-                if (dist < player.size + z.size) {
-                    player.health -= 0.5;
+                if (Math.sqrt((player.x-z.x)**2 + (player.y-z.y)**2) < player.size + z.size) {
+                    player.health -= 0.3;
                     document.getElementById("health").innerText = Math.max(0, Math.floor(player.health));
                 }
             });
-
-            player.score += 1;
-            document.getElementById("score").innerText = Math.floor(player.score / 10);
-
+            player.score++;
+            document.getElementById("score").innerText = Math.floor(player.score/10);
             draw();
             requestAnimationFrame(update);
         }
 
         function draw() {
-            ctx.fillStyle = "rgba(0,0,0,0.3)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // Draw Player (Neon Green)
-            ctx.shadowBlur = 10; ctx.shadowColor = "#00ff88";
-            ctx.fillStyle = player.color;
-            ctx.beginPath(); ctx.arc(player.x, player.y, player.size, 0, Math.PI*2); ctx.fill();
-
-            // Draw Zombies (Red)
-            ctx.shadowColor = "#ff0000";
-            ctx.fillStyle = "#ff4444";
-            zombies.forEach(z => {
-                ctx.beginPath(); ctx.arc(z.x, z.y, z.size, 0, Math.PI*2); ctx.fill();
-            });
-            ctx.shadowBlur = 0;
-
-            if (player.health <= 0) {
-                ctx.fillStyle = "white";
-                ctx.font = "bold 40px Arial";
-                ctx.fillText("GAME OVER", canvas.width/2 - 110, canvas.height/2);
-            }
+            ctx.fillStyle = "black"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = player.color; ctx.beginPath(); ctx.arc(player.x, player.y, player.size, 0, Math.PI*2); ctx.fill();
+            ctx.fillStyle = "red"; zombies.forEach(z => { ctx.beginPath(); ctx.arc(z.x, z.y, z.size, 0, Math.PI*2); ctx.fill(); });
+            if(player.health <= 0) { ctx.fillStyle = "white"; ctx.font = "30px Arial"; ctx.fillText("GAME OVER", canvas.width/2-80, canvas.height/2); }
         }
+
+        // Download Function
+        function downloadGame() {
+            const blob = new Blob([document.documentElement.outerHTML], {type: "text/html"});
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "VenomShot_Game.html";
+            a.click();
+        }
+
         update();
     </script>
 </body>
