@@ -3,68 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VENOMSHOT | Survival Game</title>
+    <title>VENOMSHOT HUB</title>
     <style>
-        body { margin: 0; background: #050505; color: white; font-family: 'Arial', sans-serif; overflow-x: hidden; display: flex; flex-direction: column; height: 100vh; }
+        body { margin: 0; background: #000; color: white; font-family: 'Segoe UI', sans-serif; overflow-y: auto; display: flex; flex-direction: column; align-items: center; }
         
-        /* 1. Game Section (Top) */
-        #gameContainer { position: relative; width: 100%; height: 60vh; background: #000; border-bottom: 3px solid #ff0000; }
-        canvas { width: 100%; height: 100%; touch-action: none; }
-        .stats { position: absolute; top: 10px; left: 10px; font-weight: bold; text-shadow: 2px 2px #000; }
+        /* SECTION 1: Game Section */
+        .section-game { width: 100%; height: 50vh; background: #000; position: relative; border-bottom: 4px solid #ff0000; }
+        canvas { width: 100%; height: 100%; touch-action: none; display: block; }
+        .game-stats { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.7); padding: 5px 10px; border-radius: 5px; font-weight: bold; font-size: 14px; border: 1px solid #ff0000; }
 
-        /* 2. Info Card Section (Bottom) */
-        .venom-card {
-            flex: 1; background: #111; padding: 20px; text-align: center;
-            border-radius: 20px 20px 0 0; box-shadow: 0 -5px 20px rgba(255,0,0,0.4);
-        }
-        .name { font-size: 30px; font-weight: 900; color: #ff0000; margin: 0; text-transform: uppercase; }
-        .uid { color: #ffcc00; font-size: 18px; margin: 10px 0; display: block; }
-        .links { margin: 15px 0; }
-        .links a { color: #00d2ff; text-decoration: none; font-size: 14px; display: block; margin: 5px 0; }
-        
-        /* Buttons */
-        .btn-group { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
-        .btn { padding: 10px 15px; border-radius: 8px; font-weight: bold; text-decoration: none; font-size: 14px; cursor: pointer; border: none; }
-        .yt-btn { background: #ff0000; color: white; }
-        .dl-btn { background: #00ff88; color: #000; }
+        /* General Section Style */
+        .section-box { width: 90%; max-width: 400px; background: #111; margin: 15px 0; border-radius: 12px; border-left: 5px solid #ff0000; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        h2 { margin: 0 0 10px 0; font-size: 18px; color: #ff0000; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* SECTION 2: Profile Section */
+        .profile-info { display: flex; flex-direction: column; gap: 5px; }
+        .uid-text { color: #ffcc00; font-weight: bold; font-size: 20px; }
+
+        /* SECTION 3: Contact Section */
+        .contact-links a { display: block; color: #00d2ff; text-decoration: none; margin: 8px 0; font-size: 15px; font-weight: 500; }
+        .yt-link { color: #ff4444 !important; font-weight: bold; }
+
+        /* SECTION 4: Download Section */
+        .download-box { text-align: center; background: linear-gradient(90deg, #111, #222); }
+        .dl-btn { background: #ff0000; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px; transition: 0.3s; }
+        .dl-btn:hover { background: #cc0000; transform: translateY(-2px); }
+
+        footer { margin-bottom: 30px; color: #444; font-size: 12px; }
     </style>
 </head>
 <body>
 
-    <div id="gameContainer">
-        <div class="stats">
-            SCORE: <span id="score">0</span> | HEALTH: <span id="health">100</span>%
-        </div>
+    <div class="section-game">
+        <div class="game-stats">SCORE: <span id="score">0</span> | HP: <span id="health">100</span>%</div>
         <canvas id="gameCanvas"></canvas>
     </div>
 
-    <div class="venom-card">
-        <h1 class="name">VENOMSHOT</h1>
-        <span class="uid">🎮 FF UID: 761339399</span>
-        
-        <div class="links">
-            <a href="mailto:ab8858281@gmail.com">📧 Email: ab8858281@gmail.com</a>
-        </div>
-
-        <div class="btn-group">
-            <a href="https://www.youtube.com/@VenomShot1" target="_blank" class="btn yt-btn">YOUTUBE</a>
-            <button class="btn dl-btn" onclick="downloadGame()">DOWNLOAD GAME</button>
+    <div class="section-box">
+        <h2>👤 Player Profile</h2>
+        <div class="profile-info">
+            <span style="font-size: 24px; font-weight: 900;">VENOMSHOT</span>
+            <span class="uid-text">UID: 761339399</span>
         </div>
     </div>
 
+    <div class="section-box">
+        <h2>✉️ Contact Me</h2>
+        <div class="contact-links">
+            <a href="mailto:ab8858281@gmail.com">📧 Email: ab8858281@gmail.com</a>
+            <a href="https://www.youtube.com/@VenomShot1" target="_blank" class="yt-link">🎬 YouTube: @VenomShot1</a>
+        </div>
+    </div>
+
+    <div class="section-box download-box">
+        <h2>📥 Get the App</h2>
+        <p style="font-size: 12px; color: #888; margin-bottom: 15px;">Download this game as an offline HTML file.</p>
+        <button class="dl-btn" onclick="downloadFile()">DOWNLOAD GAME</button>
+    </div>
+
+    <footer>Created by VENOMSHOT | 2026</footer>
+
     <script>
+        // Game Logic
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
         canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight * 0.6;
+        canvas.height = window.innerHeight * 0.5;
 
-        let player = { x: canvas.width/2, y: canvas.height/2, size: 15, color: "#00ff88", health: 100, score: 0 };
+        let player = { x: canvas.width/2, y: canvas.height/2, size: 14, color: "#00ff88", health: 100, score: 0 };
         let zombies = [];
         let touch = { x: player.x, y: player.y };
 
         function spawnZombie() {
             if (zombies.length < 5 && player.health > 0) {
-                zombies.push({ x: Math.random() * canvas.width, y: Math.random() < 0.5 ? -20 : canvas.height + 20, size: 18, speed: 1.5 });
+                zombies.push({ x: Math.random() * canvas.width, y: Math.random() < 0.5 ? -20 : canvas.height + 20, size: 16, speed: 1.5 });
             }
         }
         setInterval(spawnZombie, 2000);
@@ -76,13 +88,12 @@
             if (player.health <= 0) return;
             player.x += (touch.x - player.x) * 0.1;
             player.y += (touch.y - player.y) * 0.1;
-
             zombies.forEach((z) => {
                 let angle = Math.atan2(player.y - z.y, player.x - z.x);
                 z.x += Math.cos(angle) * z.speed;
                 z.y += Math.sin(angle) * z.speed;
                 if (Math.sqrt((player.x-z.x)**2 + (player.y-z.y)**2) < player.size + z.size) {
-                    player.health -= 0.3;
+                    player.health -= 0.5;
                     document.getElementById("health").innerText = Math.max(0, Math.floor(player.health));
                 }
             });
@@ -93,22 +104,20 @@
         }
 
         function draw() {
-            ctx.fillStyle = "black"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#000"; ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = player.color; ctx.beginPath(); ctx.arc(player.x, player.y, player.size, 0, Math.PI*2); ctx.fill();
             ctx.fillStyle = "red"; zombies.forEach(z => { ctx.beginPath(); ctx.arc(z.x, z.y, z.size, 0, Math.PI*2); ctx.fill(); });
-            if(player.health <= 0) { ctx.fillStyle = "white"; ctx.font = "30px Arial"; ctx.fillText("GAME OVER", canvas.width/2-80, canvas.height/2); }
+            if(player.health <= 0) { ctx.fillStyle = "white"; ctx.font = "bold 30px Arial"; ctx.fillText("GAME OVER", canvas.width/2-90, canvas.height/2); }
         }
 
-        // Download Function
-        function downloadGame() {
+        function downloadFile() {
             const blob = new Blob([document.documentElement.outerHTML], {type: "text/html"});
             const a = document.createElement("a");
             a.href = URL.createObjectURL(blob);
-            a.download = "VenomShot_Game.html";
+            a.download = "VenomShot_Hub.html";
             a.click();
         }
-
         update();
     </script>
 </body>
-</html>
+    </html>
