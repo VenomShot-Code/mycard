@@ -1,101 +1,143 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VENOMSHOT AUDIO FIX</title>
+    <title>VENOMSHOT | Gaming Profile</title>
     <style>
-        body { margin: 0; background: #111; color: white; overflow: hidden; touch-action: none; text-align: center; font-family: sans-serif; }
-        canvas { display: block; background: #000; margin: 0 auto; }
-        #stats { position: fixed; top: 10px; left: 10px; font-size: 20px; z-index: 10; }
-        #msg { position: fixed; top: 50%; width: 100%; font-size: 18px; color: yellow; pointer-events: none; }
+        /* CSS for Animation & Layout */
+        body { 
+            margin: 0; 
+            background: #0a0a0a; 
+            color: white; 
+            font-family: 'Segoe UI', sans-serif; 
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Animated RGB Border Card */
+        .venom-card {
+            margin-top: 50px;
+            width: 300px;
+            background: #111;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.4);
+            border: 2px solid #ff0000;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 10px #ff0000; border-color: #ff0000; }
+            to { box-shadow: 0 0 30px #ff4444; border-color: #ff4444; }
+        }
+
+        .name-header {
+            font-size: 32px;
+            margin: 0;
+            background: linear-gradient(90deg, #ff0000, #ff8800);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+        }
+
+        .uid-box {
+            background: #222;
+            border: 1px dashed #ff0000;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .yt-btn {
+            display: block;
+            background: #ff0000;
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .yt-btn:hover { background: #cc0000; transform: scale(1.05); }
+
+        /* Game Canvas Style */
+        #gameCanvas {
+            margin-top: 20px;
+            border: 2px solid #333;
+            background: #000;
+            width: 90%;
+            height: 300px;
+            border-radius: 15px;
+        }
     </style>
 </head>
 <body>
-    <div id="stats">KILLS: <span id="sc">0</span> | HP: <span id="hp">100</span></div>
-    <div id="msg">TAP TO START & SHOOT</div>
-    <canvas id="g"></canvas>
 
-<script>
-    const c = document.getElementById('g'), x = c.getContext('2d');
-    let w = c.width = window.innerWidth, h = c.height = window.innerHeight;
-    let score = 0, health = 100, active = true;
-    let p = {x: w/2, y: h/2}, bullets = [], enemies = [];
-
-    // --- AUDIO SYSTEM ---
-    const shootSound = new Audio('https://codesandbox.io/api/v1/sandboxes/66v6s/assets/shot.mp3'); 
-    const hitSound = new Audio('https://actions.google.com/sounds/v1/science_fiction/low_f_sci_fi_hum.ogg');
-    const bgMusic = new Audio('https://actions.google.com/sounds/v1/horror/creepy_sludge_movement.ogg');
-    bgMusic.loop = true;
-
-    window.onmousedown = window.ontouchstart = (e) => {
-        if(!active) return;
+    <div class="venom-card">
+        <h1 class="name-header">VENOMSHOT</h1>
+        <p style="color: #888; margin: 5px 0;">Professional Developer & Gamer</p>
         
-        // Music start karne ke liye (Browser policy)
-        if(bgMusic.paused) bgMusic.play();
-        document.getElementById('msg').style.display = 'none';
+        <div class="uid-box">
+            <span style="color: #ffcc00; font-size: 12px; font-weight: bold;">FREE FIRE UID</span><br>
+            <span style="font-size: 22px; letter-spacing: 2px; font-weight: bold;">761339399</span>
+        </div>
 
-        let tx = e.clientX || e.touches[0].clientX, ty = e.clientY || e.touches[0].clientY;
-        let ang = Math.atan2(ty - p.y, tx - p.x);
-        
-        // Goli ki awaaz
-        shootSound.currentTime = 0;
-        shootSound.play();
+        <a href="https://www.youtube.com/@VenomShot1" target="_blank" class="yt-btn">
+            SUBSCRIBE YOUTUBE
+        </a>
+    </div>
 
-        bullets.push({x: p.x, y: p.y, vx: Math.cos(ang)*12, vy: Math.sin(ang)*12});
-    };
+    <canvas id="gameCanvas"></canvas>
+    <p style="color: #555; font-size: 12px; margin-top: 10px;">Touch screen to test player movement</p>
 
-    function spawn() {
-        if(!active) return;
-        enemies.push({x: Math.random()*w, y: Math.random() < 0.5 ? 0 : h, s: 1.8});
-        setTimeout(spawn, 1000);
-    }
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth * 0.9;
+        canvas.height = 300;
 
-    function draw() {
-        if(!active) return;
-        x.fillStyle = "black"; x.fillRect(0,0,w,h);
-        
-        // Player (Survivor)
-        x.fillStyle = "lime"; x.beginPath(); x.arc(p.x, p.y, 18, 0, 7); x.fill();
-        x.strokeStyle = "white"; x.stroke();
+        let player = { x: canvas.width/2, y: canvas.height/2, size: 15, color: "#ff0000" };
+        let touchX = player.x, touchY = player.y;
 
-        // Bullets
-        bullets.forEach((b,i) => {
-            b.x += b.vx; b.y += b.vy;
-            x.fillStyle = "yellow"; x.beginPath(); x.arc(b.x, b.y, 4, 0, 7); x.fill();
-            if(b.x<0 || b.x>w || b.y<0 || b.y>h) bullets.splice(i,1);
+        canvas.addEventListener("touchstart", (e) => {
+            touchX = e.touches[0].clientX - canvas.offsetLeft;
+            touchY = e.touches[0].clientY - canvas.offsetTop;
         });
 
-        // Enemies (Zombies)
-        enemies.forEach((e,i) => {
-            let ang = Math.atan2(p.y - e.y, p.x - e.x);
-            e.x += Math.cos(ang)*e.s; e.y += Math.sin(ang)*e.s;
-            x.fillStyle = "red"; x.beginPath(); x.arc(e.x, e.y, 15, 0, 7); x.fill();
-
-            // Player Damage
-            if(Math.hypot(p.x-e.x, p.y-e.y) < 30) { 
-                health -= 2; 
-                document.getElementById('hp').innerText = Math.max(0, health);
-                if(health <= 0) { 
-                    active = false; 
-                    bgMusic.pause();
-                    alert("MISSION FAILED! Kills: " + score); 
-                    location.reload(); 
-                }
-            }
-
-            // Zombie Hit
-            bullets.forEach((b,bi) => {
-                if(Math.hypot(b.x-e.x, b.y-e.y) < 20) {
-                    hitSound.currentTime = 0;
-                    hitSound.play();
-                    enemies.splice(i,1); bullets.splice(bi,1);
-                    score++; document.getElementById('sc').innerText = score;
-                }
-            });
+        canvas.addEventListener("touchmove", (e) => {
+            e.preventDefault();
+            touchX = e.touches[0].clientX - canvas.offsetLeft;
+            touchY = e.touches[0].clientY - canvas.offsetTop;
         });
-        requestAnimationFrame(draw);
-    }
-    spawn(); draw();
-</script>
+
+        function animate() {
+            ctx.fillStyle = "rgba(0,0,0,0.2)"; // Trail effect
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Smooth follow
+            player.x += (touchX - player.x) * 0.1;
+            player.y += (touchY - player.y) * 0.1;
+
+            // Draw Neon Player
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = "#ff0000";
+            ctx.fillStyle = "#ff0000";
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, player.size, 0, Math.PI*2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+
 </body>
 </html>
