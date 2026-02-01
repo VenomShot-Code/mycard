@@ -1,167 +1,145 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VENOMSHOT | Official Pro Hub</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GitHub Mobile Game</title>
     <style>
-        body { margin: 0; padding-bottom: 80px; display: flex; flex-direction: column; align-items: center; font-family: 'Arial', sans-serif; background: #0a0a0a; color: white; overflow-x: hidden; }
-        .page { display: none; width: 100%; max-width: 400px; animation: fadeIn 0.4s; margin-top: 20px; text-align: center; }
-        .active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        #game-container { width: 90%; height: 320px; background: radial-gradient(circle, #222, #000); border: 3px solid #ff0000; position: relative; margin: 15px auto; border-radius: 20px; box-shadow: 0 0 20px rgba(255,0,0,0.3); overflow: hidden; }
-        .target { width: 50px; height: 50px; background: url('https://cdn-icons-png.flaticon.com/512/805/805370.png'); background-size: cover; position: absolute; border-radius: 50%; border: 2px solid #ff0000; cursor: crosshair; }
-        
-        .nav-bar { position: fixed; bottom: 0; width: 100%; background: #111; display: flex; justify-content: space-around; padding: 15px 0; border-top: 2px solid #ff0000; z-index: 100; }
-        .nav-item { color: #555; cursor: pointer; font-size: 12px; font-weight: bold; text-align: center; flex: 1; }
-        .active-nav { color: #ff0000; text-shadow: 0 0 8px red; }
-        
-        .btn-main { background: linear-gradient(to bottom, #ff4444, #cc0000); color: white; border: none; padding: 15px; border-radius: 15px; font-weight: bold; cursor: pointer; margin: 10px; width: 85%; display: inline-block; text-decoration: none; font-size: 14px; text-transform: uppercase; text-align: center; }
-        .btn-download { background: #ffcc00 !important; color: #000 !important; box-shadow: 0 5px 15px rgba(255,204,0,0.3); border: 2px solid #fff; }
-        
-        .dark-card { background: #151515; padding: 25px; border-radius: 30px; border: 1px solid #333; margin: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        input, textarea { width: 90%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #444; color: white; border-radius: 10px; }
-        
-        .privacy-link { margin-top: 20px; font-size: 11px; }
-        .privacy-link a { color: #666; text-decoration: none; }
+        body { margin: 0; overflow: hidden; background: #1a1a1a; font-family: 'Segoe UI', sans-serif; }
+        canvas { display: block; }
+        #ui { position: absolute; top: 15px; left: 15px; color: white; font-size: 20px; pointer-events: none; }
+        #fireBtn { 
+            position: absolute; bottom: 40px; right: 40px; 
+            width: 80px; height: 80px; background: rgba(255, 0, 0, 0.6); 
+            border-radius: 50%; border: 2px solid white; color: white;
+            font-weight: bold; display: flex; align-items: center; justify-content: center;
+            user-select: none; -webkit-tap-highlight-color: transparent;
+        }
     </style>
 </head>
 <body>
 
-    <div id="startOverlay" style="position: fixed; top:0; left:0; width:100%; height:100%; background:black; z-index:999; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-        <h1 style="color: #ff0000; font-size: 35px; letter-spacing: 3px; font-weight: 900;">VENOMSHOT</h1>
-        <p style="color: #444; font-size: 10px;">ULTRA GAMING DASHBOARD</p>
-        <button onclick="startApp()" style="margin-top: 30px; padding: 18px 50px; background:#ff0000; color:white; border:none; border-radius:50px; font-size:16px; font-weight:bold; cursor:pointer; box-shadow: 0 0 20px #ff0000;">ENTER ARENA</button>
-    </div>
-
-    <audio id="shootSound"><source src="https://cdn.pixabay.com/audio/2022/03/10/audio_73d9396f4c.mp3" type="audio/mp3"></audio>
-
-    <div id="home" class="page active">
-        <div class="dark-card">
-            <div style="width: 100px; height: 100px; border: 3px solid #ff0000; border-radius: 50%; margin: 0 auto; overflow: hidden; background: #000;">
-                <img src="https://cdn-icons-png.flaticon.com/512/805/805370.png" width="100%">
-            </div>
-            <h1 style="color: #ff0000; margin: 15px 0;">VENOMSHOT</h1>
-            
-            <a href="https://www.mediafire.com/file/9ftlvf4ufxxmqx2/_VENOMSHOT1_19492199.apk/file" target="_blank" class="btn-main btn-download">
-                <i class="fas fa-download"></i> DOWNLOAD APK NOW
-            </a>
-            
-            <div style="background: #000; padding: 15px; border-radius: 15px; border-left: 5px solid #ff0000; margin: 15px 0;">
-                <small style="color: #888;">OFFICIAL PLAYER UID</small><br>
-                <b style="font-size: 22px;">7613393999</b>
-            </div>
-            
-            <a href="https://youtube.com/@venomshot1" target="_blank" class="btn-main" style="background: #ff0000;">
-                <i class="fab fa-youtube"></i> YOUTUBE CHANNEL
-            </a>
-            <button onclick="copyID()" class="btn-main" style="background: #333;">
-                <i class="fas fa-copy"></i> COPY UID
-            </button>
-
-            <div class="privacy-link">
-                <a href="privacy.html"><i class="fas fa-user-shield"></i> Privacy Policy</a>
-            </div>
-        </div>
-    </div>
-
-    <div id="shooter" class="page">
-        <div id="rankBox" style="font-size: 20px; font-weight: bold; color: gold; margin-bottom: 10px;">RANK: BRONZE</div>
-        <div style="font-size: 14px; margin-bottom: 10px;">Score: <span id="scoreVal" style="color:#ff0000; font-weight:bold;">0</span></div>
-        <div id="game-container" onclick="missShot()"></div>
-        <button id="startBtn" onclick="startGame()" class="btn-main"><i class="fas fa-crosshairs"></i> START MATCH</button>
-    </div>
-
-    <div id="contact" class="page">
-        <div class="dark-card">
-            <h2 style="color: #ff0000;"><i class="fas fa-envelope"></i> CONTACT ME</h2>
-            <input type="text" id="subject" placeholder="Enter Subject">
-            <textarea id="msg" rows="5" placeholder="Write your message here..."></textarea>
-            <button onclick="sendEmail()" class="btn-main">SEND EMAIL</button>
-            <p style="font-size: 11px; color: #555; margin-top: 15px;">Direct Support: ab8858281@gmail.com</p>
-        </div>
-    </div>
-
-    <div class="nav-bar">
-        <div class="nav-item active-nav" id="home-btn" onclick="showPage('home')">
-            <i class="fas fa-house"></i><br>HOME
-        </div>
-        <div class="nav-item" id="shooter-btn" onclick="showPage('shooter')">
-            <i class="fas fa-crosshairs"></i><br>ARENA
-        </div>
-        <div class="nav-item" id="contact-btn" onclick="showPage('contact')">
-            <i class="fas fa-envelope"></i><br>EMAIL
-        </div>
-    </div>
+    <div id="ui">Score: <span id="score">0</span> | Health: <span id="health">100</span></div>
+    <div id="fireBtn">FIRE</div>
+    <canvas id="gameCanvas"></canvas>
 
     <script>
-        let score = 0, gameActive = false;
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const scoreDisp = document.getElementById("score");
+        const healthDisp = document.getElementById("health");
 
-        function startApp() { document.getElementById('startOverlay').style.display = 'none'; }
-        
-        function showPage(pId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
-            document.getElementById(pId).classList.add('active');
-            document.getElementById(pId + '-btn').classList.add('active-nav');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let player = { x: canvas.width/2, y: canvas.height/2, size: 18, color: "#00ff88", speed: 4, health: 100, score: 0 };
+        let enemy = { x: 50, y: 50, size: 18, color: "#ff4444", speed: 2.2 };
+        let bullets = [];
+        let joystick = { active: false, x: 0, y: 0, currX: 0, currY: 0, radius: 50 };
+        let moveX = 0, moveY = 0;
+
+        // Joystick Controls
+        canvas.addEventListener("touchstart", (e) => {
+            if(e.touches[0].clientX < canvas.width / 2) {
+                joystick.active = true;
+                joystick.x = e.touches[0].clientX;
+                joystick.y = e.touches[0].clientY;
+            }
+        });
+
+        canvas.addEventListener("touchmove", (e) => {
+            if (joystick.active) {
+                let touch = Array.from(e.touches).find(t => t.clientX < canvas.width / 2);
+                if(touch) {
+                    joystick.currX = touch.clientX;
+                    joystick.currY = touch.clientY;
+                    let dx = joystick.currX - joystick.x;
+                    let dy = joystick.currY - joystick.y;
+                    let angle = Math.atan2(dy, dx);
+                    moveX = Math.cos(angle);
+                    moveY = Math.sin(angle);
+                }
+            }
+        });
+
+        canvas.addEventListener("touchend", () => { joystick.active = false; moveX = 0; moveY = 0; });
+
+        // Firing Logic
+        document.getElementById("fireBtn").addEventListener("touchstart", (e) => {
+            e.preventDefault();
+            // Goli dushman ki taraf chalegi
+            let angle = Math.atan2(enemy.y - player.y, enemy.x - player.x);
+            bullets.push({ x: player.x, y: player.y, vx: Math.cos(angle) * 8, vy: Math.sin(angle) * 8 });
+        });
+
+        function update() {
+            if (player.health <= 0) return;
+
+            // Player movement
+            player.x += moveX * player.speed;
+            player.y += moveY * player.speed;
+
+            // Enemy AI
+            let edx = player.x - enemy.x;
+            let edy = player.y - enemy.y;
+            let eAngle = Math.atan2(edy, edx);
+            enemy.x += Math.cos(eAngle) * enemy.speed;
+            enemy.y += Math.sin(eAngle) * enemy.speed;
+
+            // Bullet Movement & Collision
+            bullets.forEach((b, bi) => {
+                b.x += b.vx; b.y += b.vy;
+                let bdx = b.x - enemy.x;
+                let bdy = b.y - enemy.y;
+                if(Math.sqrt(bdx*bdx + bdy*bdy) < enemy.size) {
+                    bullets.splice(bi, 1);
+                    enemy.x = Math.random() * canvas.width;
+                    enemy.y = Math.random() * canvas.height;
+                    player.score += 10;
+                    scoreDisp.innerText = player.score;
+                    enemy.speed += 0.1; // Dushman tez hota jayega
+                }
+            });
+
+            // Player Damage
+            if (Math.sqrt(edx*edx + edy*edy) < player.size + enemy.size) {
+                player.health -= 0.5;
+                healthDisp.innerText = Math.floor(player.health);
+            }
+
+            draw();
+            requestAnimationFrame(update);
         }
 
-        function startGame() {
-            if(gameActive) return;
-            score = 0; gameActive = true;
-            document.getElementById('scoreVal').innerText = score;
-            document.getElementById('startBtn').style.visibility = 'hidden';
-            spawnTarget();
-        }
+        function draw() {
+            ctx.fillStyle = "#1a1a1a";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        function spawnTarget() {
-            if(!gameActive) return;
-            const gc = document.getElementById('game-container');
-            document.querySelector('.target')?.remove();
-            const t = document.createElement('div');
-            t.className = 'target';
-            t.style.left = Math.random() * (gc.offsetWidth - 60) + 'px';
-            t.style.top = Math.random() * (gc.offsetHeight - 60) + 'px';
-            t.onclick = (e) => { e.stopPropagation(); hitTarget(); };
-            gc.appendChild(t);
-        }
+            // Draw Player
+            ctx.fillStyle = player.color;
+            ctx.beginPath(); ctx.arc(player.x, player.y, player.size, 0, Math.PI*2); ctx.fill();
 
-        function hitTarget() {
-            score++;
-            document.getElementById('scoreVal').innerText = score;
-            let s = document.getElementById('shootSound'); s.currentTime = 0; s.play();
-            spawnTarget();
-            updateRank();
-        }
+            // Draw Enemy
+            ctx.fillStyle = enemy.color;
+            ctx.beginPath(); ctx.arc(enemy.x, enemy.y, enemy.size, 0, Math.PI*2); ctx.fill();
 
-        function updateRank() {
-            let r = "BRONZE", c = "#cd7f32";
-            if(score > 30) { r = "GRANDMASTER 👑"; c = "#0ff"; }
-            else if(score > 20) { r = "HEROIC 🔥"; c = "#f0f"; }
-            else if(score > 10) { r = "GOLD 🥇"; c = "gold"; }
-            document.getElementById('rankBox').innerText = "RANK: " + r;
-            document.getElementById('rankBox').style.color = c;
-        }
+            // Draw Bullets
+            ctx.fillStyle = "yellow";
+            bullets.forEach(b => {
+                ctx.beginPath(); ctx.arc(b.x, b.y, 4, 0, Math.PI*2); ctx.fill();
+            });
 
-        function missShot() { 
-            if(gameActive) { 
-                let s = document.getElementById('shootSound'); s.currentTime = 0; s.play(); 
-            } 
-        }
+            // Draw Joystick UI
+            if (joystick.active) {
+                ctx.strokeStyle = "white"; ctx.beginPath();
+                ctx.arc(joystick.x, joystick.y, joystick.radius, 0, Math.PI*2); ctx.stroke();
+            }
 
-        function copyID() { 
-            navigator.clipboard.writeText("7613393999"); 
-            alert("VENOMSHOT UID Copied!"); 
+            if(player.health <= 0) {
+                ctx.fillStyle = "white"; ctx.font = "30px Arial";
+                ctx.fillText("GAME OVER! Score: " + player.score, canvas.width/2 - 120, canvas.height/2);
+            }
         }
-        
-        function sendEmail() {
-            const sub = document.getElementById('subject').value;
-            const msg = document.getElementById('msg').value;
-            if(!sub || !msg) return alert("Please fill all fields!");
-            window.location.href = `mailto:ab8858281@gmail.com?subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(msg)}`;
-        }
+        update();
     </script>
 </body>
-    </html>
+</html>
