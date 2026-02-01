@@ -3,168 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>VENOMSHOT | Ultra Unique Hub</title>
-    <style>
-        :root { --neon: #ff0000; --bg: #050505; --glass: rgba(255, 255, 255, 0.05); }
-        
-        body { 
-            margin: 0; background: var(--bg); color: white; 
-            font-family: 'Orbitron', sans-serif; overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% 50%, #1a0000 0%, #050505 100%);
-        }
-
-        /* Unique Floating Header */
-        .unique-header {
-            text-align: center; padding: 30px 0;
-            background: linear-gradient(to bottom, rgba(255,0,0,0.2), transparent);
-        }
-        .glitch-name {
-            font-size: 45px; font-weight: 900; color: #fff;
-            text-shadow: 3px 3px var(--neon), -3px -3px #00d2ff;
-            letter-spacing: 5px; animation: glow 2s infinite alternate;
-        }
-
-        /* Game Section with Neon Border */
-        .game-wrapper {
-            width: 95%; max-width: 500px; margin: 0 auto;
-            border: 2px solid var(--neon); border-radius: 20px;
-            overflow: hidden; box-shadow: 0 0 20px var(--neon);
-            position: relative; height: 350px;
-        }
-        canvas { background: #000; display: block; }
-
-        /* Grid Layout for Unique Sections */
-        .grid-container {
-            display: grid; grid-template-columns: 1fr 1fr;
-            gap: 15px; width: 95%; max-width: 500px; margin: 20px auto;
-        }
-
-        .glass-box {
-            background: var(--glass); backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 15px; border-radius: 15px;
-            transition: 0.3s; position: relative; overflow: hidden;
-        }
-        .glass-box:hover { border-color: var(--neon); transform: translateY(-5px); }
-
-        .full-width { grid-column: span 2; }
-
-        h3 { font-size: 12px; color: var(--neon); text-transform: uppercase; margin: 0 0 10px 0; }
-        .val { font-size: 16px; font-weight: bold; color: #fff; }
-
-        /* Modern Buttons */
-        .action-btn {
-            width: 100%; padding: 12px; border: none; border-radius: 10px;
-            font-weight: bold; cursor: pointer; transition: 0.3s;
-            text-decoration: none; display: inline-block; text-align: center;
-        }
-        .btn-yt { background: #ff0000; color: white; box-shadow: 0 4px 15px rgba(255,0,0,0.3); }
-        .btn-dl { background: white; color: black; margin-top: 10px; }
-
-        @keyframes glow {
-            from { text-shadow: 3px 3px var(--neon), 0 0 10px var(--neon); }
-            to { text-shadow: 3px 3px var(--neon), 0 0 30px var(--neon); }
-        }
-    </style>
+    <title>VENOMSHOT | Pro Dev Level 99</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet">
+    <style>
+        :root { --neon: #ff0000; --bg: #050505; }
+        body { margin: 0; background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; overflow-x: hidden; text-align: center; }
+        
+        /* Header */
+        .glitch-name { font-family: 'Orbitron'; font-size: 35px; color: #fff; text-shadow: 0 0 15px var(--neon); margin: 20px 0; letter-spacing: 3px; }
+
+        /* Game Area */
+        .game-frame { position: relative; width: 95%; height: 350px; margin: 0 auto; border: 2px solid var(--neon); border-radius: 15px; overflow: hidden; box-shadow: 0 0 20px rgba(255,0,0,0.3); }
+        canvas { background: #000; display: block; touch-action: none; }
+
+        /* Unique Sections */
+        .grid-info { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 95%; margin: 15px auto; }
+        .box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,0,0,0.3); padding: 10px; border-radius: 10px; backdrop-filter: blur(5px); }
+        .label { font-size: 10px; color: var(--neon); text-transform: uppercase; font-weight: bold; }
+        .val { font-size: 14px; font-weight: bold; margin-top: 5px; }
+
+        /* Fire Button - Neon Style */
+        #fireBtn { 
+            position: absolute; bottom: 20px; right: 20px; 
+            width: 70px; height: 70px; background: rgba(255,0,0,0.4); 
+            border: 3px solid #ff0000; border-radius: 50%; color: white; 
+            font-weight: bold; font-family: 'Orbitron'; cursor: pointer;
+            box-shadow: 0 0 15px #ff0000; display: flex; align-items: center; justify-content: center;
+            user-select: none; -webkit-tap-highlight-color: transparent;
+        }
+        #fireBtn:active { transform: scale(0.9); background: rgba(255,0,0,0.8); }
+
+        .btn-link { display: block; text-decoration: none; background: #fff; color: #000; padding: 10px; border-radius: 8px; font-weight: bold; margin-top: 10px; font-size: 14px; }
+        .btn-yt { background: #ff0000; color: #fff; }
+    </style>
 </head>
 <body>
 
-    <div class="unique-header">
-        <div class="glitch-name">VENOMSHOT</div>
-    </div>
+    <div class="glitch-name">VENOMSHOT</div>
 
-    <div class="game-wrapper">
-        <div style="position: absolute; top: 10px; left: 10px; font-size: 12px; z-index: 5; color: #ff0000; font-weight: bold;">
-            LIVE_SYSTEM: ACTIVE | SCORE: <span id="score">0</span>
+    <div class="game-frame">
+        <div style="position: absolute; top: 10px; left: 10px; font-family: 'Orbitron'; font-size: 12px; color: #ff0000;">
+            SCORE: <span id="score">0</span> | HP: <span id="health">100</span>
         </div>
         <canvas id="gameCanvas"></canvas>
+        <div id="fireBtn">FIRE</div>
     </div>
 
-    <div class="grid-container">
-        
-        <div class="glass-box">
-            <h3>Player UID</h3>
-            <div class="val" style="color: #ffcc00;">761339399</div>
+    <div class="grid-info">
+        <div class="box">
+            <div class="label">ID STATUS</div>
+            <div class="val" style="color:#ffcc00">DEV_LEVEL_99</div>
         </div>
-
-        <div class="glass-box">
-            <h3>Status</h3>
-            <div class="val">DEV_LEVEL_99</div>
+        <div class="box">
+            <div class="label">FF UID</div>
+            <div class="val">761339399</div>
         </div>
-
-        <div class="glass-box full-width">
-            <h3>Secure Contact</h3>
-            <div class="val" style="font-size: 14px;">ab8858281@gmail.com</div>
+        <div class="box" style="grid-column: span 2;">
+            <div class="label">SECURE EMAIL</div>
+            <div class="val" style="font-size: 13px;">ab8858281@gmail.com</div>
         </div>
-
-        <div class="glass-box">
-            <a href="https://www.youtube.com/@VenomShot1" target="_blank" class="action-btn btn-yt">YOUTUBE</a>
-        </div>
-
-        <div class="glass-box">
-            <button class="action-btn btn-dl" onclick="downloadHub()">GET_APP</button>
-        </div>
-
     </div>
 
-    <footer style="margin: 20px; font-size: 10px; opacity: 0.4;">© 2026 VENOMSHOT ENCRYPTION</footer>
+    <div style="width: 95%; margin: 0 auto 30px;">
+        <a href="https://www.youtube.com/@VenomShot1" target="_blank" class="btn-link btn-yt">SUBSCRIBE YOUTUBE</a>
+        <button onclick="downloadCode()" class="btn-link" style="width:100%; border:none; cursor:pointer;">DOWNLOAD HUB V3</button>
+    </div>
 
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
-        canvas.width = 500; canvas.height = 350;
+        canvas.width = window.innerWidth * 0.95; canvas.height = 350;
 
-        let player = { x: 250, y: 175, size: 12, color: "#fff" };
+        let player = { x: canvas.width/2, y: canvas.height/2, size: 15, health: 100, score: 0 };
         let zombies = [];
-        let score = 0;
-        let touch = { x: 250, y: 175 };
+        let bullets = [];
+        let touch = { x: player.x, y: player.y };
 
-        function spawn() {
-            if(zombies.length < 6) zombies.push({
-                x: Math.random()*canvas.width, y: Math.random()*canvas.height,
-                vx: (Math.random()-0.5)*2, vy: (Math.random()-0.5)*2
-            });
-        }
-        setInterval(spawn, 2000);
-
-        canvas.addEventListener("touchmove", (e) => {
-            e.preventDefault();
+        // Movement
+        canvas.addEventListener("touchstart", (e) => { updateTouch(e); });
+        canvas.addEventListener("touchmove", (e) => { e.preventDefault(); updateTouch(e); });
+        function updateTouch(e) {
             let rect = canvas.getBoundingClientRect();
             touch.x = e.touches[0].clientX - rect.left;
             touch.y = e.touches[0].clientY - rect.top;
-        });
-
-        function play() {
-            ctx.fillStyle = "rgba(0,0,0,0.2)"; ctx.fillRect(0,0,canvas.width,canvas.height);
-            
-            player.x += (touch.x - player.x) * 0.1;
-            player.y += (touch.y - player.y) * 0.1;
-
-            ctx.fillStyle = "#ff0000";
-            zombies.forEach(z => {
-                z.x += (player.x - z.x) * 0.02;
-                z.y += (player.y - z.y) * 0.02;
-                ctx.beginPath(); ctx.arc(z.x, z.y, 8, 0, Math.PI*2); ctx.fill();
-            });
-
-            ctx.fillStyle = "#fff"; ctx.shadowBlur = 10; ctx.shadowColor = "#fff";
-            ctx.beginPath(); ctx.arc(player.x, player.y, player.size, 0, Math.PI*2); ctx.fill();
-            ctx.shadowBlur = 0;
-
-            score++;
-            document.getElementById("score").innerText = Math.floor(score/10);
-            requestAnimationFrame(play);
         }
 
-        function downloadHub() {
+        // Fire Button Click
+        document.getElementById("fireBtn").addEventListener("touchstart", (e) => {
+            e.preventDefault();
+            if(zombies.length > 0) {
+                // Sabse kareeb wale zombie par goli chalegi
+                let target = zombies[0];
+                let angle = Math.atan2(target.y - player.y, target.x - player.x);
+                bullets.push({ x: player.x, y: player.y, vx: Math.cos(angle) * 10, vy: Math.sin(angle) * 10 });
+            }
+        });
+
+        function spawn() {
+            if(zombies.length < 5 && player.health > 0) {
+                zombies.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, speed: 1.5 });
+            }
+        }
+        setInterval(spawn, 2000);
+
+        function gameLoop() {
+            if(player.health <= 0) return;
+            ctx.fillStyle = "rgba(0,0,0,0.3)"; ctx.fillRect(0,0,canvas.width,canvas.height);
+
+            // Player Follow
+            player.x += (touch.x - player.x) * 0.1;
+            player.y += (touch.y - player.y) * 0.1;
+            ctx.fillStyle = "#00ff88"; ctx.beginPath(); ctx.arc(player.x, player.y, player.size, 0, Math.PI*2); ctx.fill();
+
+            // Bullets
+            bullets.forEach((b, bi) => {
+                b.x += b.vx; b.y += b.vy;
+                ctx.fillStyle = "yellow"; ctx.beginPath(); ctx.arc(b.x, b.y, 4, 0, Math.PI*2); ctx.fill();
+                
+                zombies.forEach((z, zi) => {
+                    if(Math.sqrt((b.x-z.x)**2 + (b.y-z.y)**2) < 20) {
+                        zombies.splice(zi, 1); bullets.splice(bi, 1);
+                        player.score += 10;
+                        document.getElementById("score").innerText = player.score;
+                    }
+                });
+            });
+
+            // Zombies
+            zombies.forEach((z, i) => {
+                let angle = Math.atan2(player.y - z.y, player.x - z.x);
+                z.x += Math.cos(angle) * z.speed; z.y += Math.sin(angle) * z.speed;
+                ctx.fillStyle = "red"; ctx.beginPath(); ctx.arc(z.x, z.y, 12, 0, Math.PI*2); ctx.fill();
+
+                if(Math.sqrt((player.x-z.x)**2 + (player.y-z.y)**2) < 20) {
+                    player.health -= 0.5;
+                    document.getElementById("health").innerText = Math.floor(player.health);
+                }
+            });
+
+            if(player.health <= 0) {
+                ctx.fillStyle = "white"; ctx.font = "20px Orbitron";
+                ctx.fillText("MISSION FAILED", canvas.width/2-80, canvas.height/2);
+            }
+            requestAnimationFrame(gameLoop);
+        }
+
+        function downloadCode() {
             const blob = new Blob([document.documentElement.outerHTML], {type: "text/html"});
             const a = document.createElement("a");
             a.href = URL.createObjectURL(blob);
-            a.download = "VenomShot_V3.html";
+            a.download = "VenomShot_Pro.html";
             a.click();
         }
-        play();
+
+        gameLoop();
     </script>
 </body>
 </html>
