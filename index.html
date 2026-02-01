@@ -2,144 +2,100 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GitHub Mobile Game</title>
+    <title>VENOMSHOT AUDIO FIX</title>
     <style>
-        body { margin: 0; overflow: hidden; background: #1a1a1a; font-family: 'Segoe UI', sans-serif; }
-        canvas { display: block; }
-        #ui { position: absolute; top: 15px; left: 15px; color: white; font-size: 20px; pointer-events: none; }
-        #fireBtn { 
-            position: absolute; bottom: 40px; right: 40px; 
-            width: 80px; height: 80px; background: rgba(255, 0, 0, 0.6); 
-            border-radius: 50%; border: 2px solid white; color: white;
-            font-weight: bold; display: flex; align-items: center; justify-content: center;
-            user-select: none; -webkit-tap-highlight-color: transparent;
-        }
+        body { margin: 0; background: #111; color: white; overflow: hidden; touch-action: none; text-align: center; font-family: sans-serif; }
+        canvas { display: block; background: #000; margin: 0 auto; }
+        #stats { position: fixed; top: 10px; left: 10px; font-size: 20px; z-index: 10; }
+        #msg { position: fixed; top: 50%; width: 100%; font-size: 18px; color: yellow; pointer-events: none; }
     </style>
 </head>
 <body>
+    <div id="stats">KILLS: <span id="sc">0</span> | HP: <span id="hp">100</span></div>
+    <div id="msg">TAP TO START & SHOOT</div>
+    <canvas id="g"></canvas>
 
-    <div id="ui">Score: <span id="score">0</span> | Health: <span id="health">100</span></div>
-    <div id="fireBtn">FIRE</div>
-    <canvas id="gameCanvas"></canvas>
+<script>
+    const c = document.getElementById('g'), x = c.getContext('2d');
+    let w = c.width = window.innerWidth, h = c.height = window.innerHeight;
+    let score = 0, health = 100, active = true;
+    let p = {x: w/2, y: h/2}, bullets = [], enemies = [];
 
-    <script>
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
-        const scoreDisp = document.getElementById("score");
-        const healthDisp = document.getElementById("health");
+    // --- AUDIO SYSTEM ---
+    const shootSound = new Audio('https://codesandbox.io/api/v1/sandboxes/66v6s/assets/shot.mp3'); 
+    const hitSound = new Audio('https://actions.google.com/sounds/v1/science_fiction/low_f_sci_fi_hum.ogg');
+    const bgMusic = new Audio('https://actions.google.com/sounds/v1/horror/creepy_sludge_movement.ogg');
+    bgMusic.loop = true;
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+    window.onmousedown = window.ontouchstart = (e) => {
+        if(!active) return;
+        
+        // Music start karne ke liye (Browser policy)
+        if(bgMusic.paused) bgMusic.play();
+        document.getElementById('msg').style.display = 'none';
 
-        let player = { x: canvas.width/2, y: canvas.height/2, size: 18, color: "#00ff88", speed: 4, health: 100, score: 0 };
-        let enemy = { x: 50, y: 50, size: 18, color: "#ff4444", speed: 2.2 };
-        let bullets = [];
-        let joystick = { active: false, x: 0, y: 0, currX: 0, currY: 0, radius: 50 };
-        let moveX = 0, moveY = 0;
+        let tx = e.clientX || e.touches[0].clientX, ty = e.clientY || e.touches[0].clientY;
+        let ang = Math.atan2(ty - p.y, tx - p.x);
+        
+        // Goli ki awaaz
+        shootSound.currentTime = 0;
+        shootSound.play();
 
-        // Joystick Controls
-        canvas.addEventListener("touchstart", (e) => {
-            if(e.touches[0].clientX < canvas.width / 2) {
-                joystick.active = true;
-                joystick.x = e.touches[0].clientX;
-                joystick.y = e.touches[0].clientY;
-            }
+        bullets.push({x: p.x, y: p.y, vx: Math.cos(ang)*12, vy: Math.sin(ang)*12});
+    };
+
+    function spawn() {
+        if(!active) return;
+        enemies.push({x: Math.random()*w, y: Math.random() < 0.5 ? 0 : h, s: 1.8});
+        setTimeout(spawn, 1000);
+    }
+
+    function draw() {
+        if(!active) return;
+        x.fillStyle = "black"; x.fillRect(0,0,w,h);
+        
+        // Player (Survivor)
+        x.fillStyle = "lime"; x.beginPath(); x.arc(p.x, p.y, 18, 0, 7); x.fill();
+        x.strokeStyle = "white"; x.stroke();
+
+        // Bullets
+        bullets.forEach((b,i) => {
+            b.x += b.vx; b.y += b.vy;
+            x.fillStyle = "yellow"; x.beginPath(); x.arc(b.x, b.y, 4, 0, 7); x.fill();
+            if(b.x<0 || b.x>w || b.y<0 || b.y>h) bullets.splice(i,1);
         });
 
-        canvas.addEventListener("touchmove", (e) => {
-            if (joystick.active) {
-                let touch = Array.from(e.touches).find(t => t.clientX < canvas.width / 2);
-                if(touch) {
-                    joystick.currX = touch.clientX;
-                    joystick.currY = touch.clientY;
-                    let dx = joystick.currX - joystick.x;
-                    let dy = joystick.currY - joystick.y;
-                    let angle = Math.atan2(dy, dx);
-                    moveX = Math.cos(angle);
-                    moveY = Math.sin(angle);
-                }
-            }
-        });
-
-        canvas.addEventListener("touchend", () => { joystick.active = false; moveX = 0; moveY = 0; });
-
-        // Firing Logic
-        document.getElementById("fireBtn").addEventListener("touchstart", (e) => {
-            e.preventDefault();
-            // Goli dushman ki taraf chalegi
-            let angle = Math.atan2(enemy.y - player.y, enemy.x - player.x);
-            bullets.push({ x: player.x, y: player.y, vx: Math.cos(angle) * 8, vy: Math.sin(angle) * 8 });
-        });
-
-        function update() {
-            if (player.health <= 0) return;
-
-            // Player movement
-            player.x += moveX * player.speed;
-            player.y += moveY * player.speed;
-
-            // Enemy AI
-            let edx = player.x - enemy.x;
-            let edy = player.y - enemy.y;
-            let eAngle = Math.atan2(edy, edx);
-            enemy.x += Math.cos(eAngle) * enemy.speed;
-            enemy.y += Math.sin(eAngle) * enemy.speed;
-
-            // Bullet Movement & Collision
-            bullets.forEach((b, bi) => {
-                b.x += b.vx; b.y += b.vy;
-                let bdx = b.x - enemy.x;
-                let bdy = b.y - enemy.y;
-                if(Math.sqrt(bdx*bdx + bdy*bdy) < enemy.size) {
-                    bullets.splice(bi, 1);
-                    enemy.x = Math.random() * canvas.width;
-                    enemy.y = Math.random() * canvas.height;
-                    player.score += 10;
-                    scoreDisp.innerText = player.score;
-                    enemy.speed += 0.1; // Dushman tez hota jayega
-                }
-            });
+        // Enemies (Zombies)
+        enemies.forEach((e,i) => {
+            let ang = Math.atan2(p.y - e.y, p.x - e.x);
+            e.x += Math.cos(ang)*e.s; e.y += Math.sin(ang)*e.s;
+            x.fillStyle = "red"; x.beginPath(); x.arc(e.x, e.y, 15, 0, 7); x.fill();
 
             // Player Damage
-            if (Math.sqrt(edx*edx + edy*edy) < player.size + enemy.size) {
-                player.health -= 0.5;
-                healthDisp.innerText = Math.floor(player.health);
+            if(Math.hypot(p.x-e.x, p.y-e.y) < 30) { 
+                health -= 2; 
+                document.getElementById('hp').innerText = Math.max(0, health);
+                if(health <= 0) { 
+                    active = false; 
+                    bgMusic.pause();
+                    alert("MISSION FAILED! Kills: " + score); 
+                    location.reload(); 
+                }
             }
 
-            draw();
-            requestAnimationFrame(update);
-        }
-
-        function draw() {
-            ctx.fillStyle = "#1a1a1a";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // Draw Player
-            ctx.fillStyle = player.color;
-            ctx.beginPath(); ctx.arc(player.x, player.y, player.size, 0, Math.PI*2); ctx.fill();
-
-            // Draw Enemy
-            ctx.fillStyle = enemy.color;
-            ctx.beginPath(); ctx.arc(enemy.x, enemy.y, enemy.size, 0, Math.PI*2); ctx.fill();
-
-            // Draw Bullets
-            ctx.fillStyle = "yellow";
-            bullets.forEach(b => {
-                ctx.beginPath(); ctx.arc(b.x, b.y, 4, 0, Math.PI*2); ctx.fill();
+            // Zombie Hit
+            bullets.forEach((b,bi) => {
+                if(Math.hypot(b.x-e.x, b.y-e.y) < 20) {
+                    hitSound.currentTime = 0;
+                    hitSound.play();
+                    enemies.splice(i,1); bullets.splice(bi,1);
+                    score++; document.getElementById('sc').innerText = score;
+                }
             });
-
-            // Draw Joystick UI
-            if (joystick.active) {
-                ctx.strokeStyle = "white"; ctx.beginPath();
-                ctx.arc(joystick.x, joystick.y, joystick.radius, 0, Math.PI*2); ctx.stroke();
-            }
-
-            if(player.health <= 0) {
-                ctx.fillStyle = "white"; ctx.font = "30px Arial";
-                ctx.fillText("GAME OVER! Score: " + player.score, canvas.width/2 - 120, canvas.height/2);
-            }
-        }
-        update();
-    </script>
+        });
+        requestAnimationFrame(draw);
+    }
+    spawn(); draw();
+</script>
 </body>
 </html>
